@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>S&amp;P500 사이클 스크리너</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --border: rgba(11, 11, 11, 0.10);
+    --up: #d03b3b;        /* 상승·양수 = 빨강 (한국식) */
+    --down: #1c5cab;      /* 하락·음수 = 파랑 */
+    --down-wash: rgba(28, 92, 171, 0.10);
+    --row-hover: rgba(11, 11, 11, 0.035);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --border: rgba(255, 255, 255, 0.10);
+      --up: #e66767;
+      --down: #6da7ec;
+      --down-wash: rgba(109, 167, 236, 0.14);
+      --row-hover: rgba(255, 255, 255, 0.045);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.5;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 64px; }
+
+  header h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .sub { color: var(--ink-2); font-size: 13px; margin: 0; }
+  .sub .kst { color: var(--muted); }
+
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin: 20px 0 28px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .kpi .label { font-size: 12px; color: var(--muted); }
+  .kpi .value { font-size: 26px; font-weight: 650; letter-spacing: -0.01em; }
+  .kpi .value small { font-size: 13px; font-weight: 400; color: var(--muted); }
+
+  section { margin-bottom: 36px; }
+  section h2 { font-size: 16px; margin: 0 0 2px; }
+  .section-note { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
+
+  .table-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow-x: auto;
+  }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; white-space: nowrap; }
+  th, td { padding: 8px 12px; text-align: right; }
+  th:nth-child(-n+3), td:nth-child(-n+3) { text-align: left; }
+  thead th {
+    font-size: 12px; font-weight: 600; color: var(--muted);
+    border-bottom: 1px solid var(--grid);
+    cursor: pointer; user-select: none; position: sticky; top: 0; background: var(--surface);
+  }
+  thead th:hover { color: var(--ink); }
+  thead th .arrow { font-size: 10px; }
+  tbody tr { border-bottom: 1px solid var(--grid); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--row-hover); }
+  td.num { font-variant-numeric: tabular-nums; }
+  td .name { color: var(--ink-2); }
+  td .sector { color: var(--muted); font-size: 12px; }
+  .ticker { font-weight: 650; }
+  .pos { color: var(--up); }
+  .neg { color: var(--down); }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    color: var(--down); background: var(--down-wash);
+    border-radius: 20px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px;
+  }
+  .empty { padding: 28px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  footer { border-top: 1px solid var(--grid); padding-top: 16px; color: var(--muted); font-size: 12.5px; }
+  footer ul { margin: 6px 0 12px; padding-left: 18px; }
+  footer li { margin: 2px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>S&amp;P500 사이클 스크리너</h1>
+    <p class="sub">급락–회복 사이클을 반복해 온 종목이 다시 급락 국면에 들어왔을 때 포착합니다.
+      <span class="kst" id="updated"></span></p>
+  </header>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section>
+    <h2>오늘의 후보 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1·2·3 모두 통과 — 급락 진행 중</span></h2>
+    <p class="section-note" id="cand-note"></p>
+    <div class="table-box"><div id="cand-table"></div></div>
+  </section>
+
+  <section>
+    <h2>관심 종목 풀 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1·2 통과 — 유동성 + 사이클 이력</span></h2>
+    <p class="section-note" id="pool-note"></p>
+    <div class="table-box"><div id="pool-table"></div></div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+const fmt = {
+  pct(v, signed = true) {
+    if (v === null || v === undefined) return '—';
+    const cls = v > 0 ? 'pos' : v < 0 ? 'neg' : '';
+    const s = (signed && v > 0 ? '+' : '') + v.toFixed(1) + '%';
+    return `<span class="${cls}">${s}</span>`;
+  },
+  money(v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); },
+  date(s) { return s ? s.slice(2) : '—'; },  // 2026-06-22 → 26-06-22
+};
+
+function makeTable(rows, cols, mountId, emptyMsg) {
+  const mount = document.getElementById(mountId);
+  if (!rows.length) { mount.innerHTML = `<div class="empty">${emptyMsg}</div>`; return; }
+  let sortKey = null, sortDir = -1;
+
+  function render() {
+    const sorted = [...rows];
+    if (sortKey !== null) {
+      sorted.sort((a, b) => {
+        const [x, y] = [cols[sortKey].val(a), cols[sortKey].val(b)];
+        if (x === null) return 1;
+        if (y === null) return -1;
+        return (x < y ? -1 : x > y ? 1 : 0) * sortDir;
+      });
+    }
+    const head = cols.map((c, i) =>
+      `<th data-i="${i}">${c.label}${i === sortKey ? `<span class="arrow"> ${sortDir < 0 ? '▼' : '▲'}</span>` : ''}</th>`).join('');
+    const body = sorted.map(r =>
+      `<tr>${cols.map(c => `<td class="num">${c.cell(r)}</td>`).join('')}</tr>`).join('');
+    mount.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+    mount.querySelectorAll('th').forEach(th => th.addEventListener('click', () => {
+      const i = +th.dataset.i;
+      sortDir = i === sortKey ? -sortDir : -1;
+      sortKey = i;
+      render();
+    }));
+  }
+  render();
+}
+
+async function main() {
+  const res = await fetch('data.json?ts=' + Date.now());
+  const d = await res.json();
+  const cfg = d.config;
+  const candSet = new Set(d.candidates);
+  const cands = d.candidates.map(t => d.pool.find(p => p.ticker === t));
+
+  document.getElementById('updated').textContent = `업데이트 ${d.updated_kst}`;
+
+  document.getElementById('kpis').innerHTML = [
+    ['S&P500 종목', d.universe_count, ''],
+    [`거래대금 상위 ${cfg.LIQUIDITY_TOP_PCT}%`, d.liquid_count, '조건 1'],
+    ['관심 종목 풀', d.pool.length, '조건 1+2'],
+    ['오늘의 후보', d.candidates.length, '조건 1+2+3'],
+  ].map(([label, v, tag]) =>
+    `<div class="kpi"><div class="label">${label}</div><div class="value">${v}<small> ${tag}</small></div></div>`).join('');
+
+  document.getElementById('cand-note').textContent =
+    `랠리(고점 시점 1년 전 대비 +${cfg.PEAK_RUNUP_PCT}% 이상)로 만든 최근 ${cfg.PEAK_WINDOW_YEARS}년 내 고점에서 -${cfg.CURRENT_DROP_PCT}% 이상 하락 중인 종목. 낙폭 큰 순.`;
+  document.getElementById('pool-note').textContent =
+    `${cfg.LIQUIDITY_YEARS}년 평균 거래대금 상위 ${cfg.LIQUIDITY_TOP_PCT}% 중 -${cfg.CYCLE_DRAWDOWN_PCT}% 낙폭 후 전고점 회복을 ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주했고 최근 ${cfg.LONG_TERM_YEARS}년 수익률이 플러스인 종목. 거래대금 순.`;
+
+  const tickerCell = r => `<span class="ticker">${r.ticker}</span>${candSet.has(r.ticker) ? '<span class="badge">급락 중</span>' : ''}`;
+  const nameCol = { label: '이름', val: r => r.name, cell: r => `<span class="name">${r.name}</span>` };
+  const sectorCol = { label: '섹터', val: r => r.sector, cell: r => `<span class="sector">${r.sector}</span>` };
+
+  makeTable(cands, [
+    { label: '티커', val: r => r.ticker, cell: r => `<span class="ticker">${r.ticker}</span>` },
+    nameCol, sectorCol,
+    { label: '현재가', val: r => r.price, cell: r => fmt.money(r.price) },
+    { label: '기준 고점', val: r => r.peak_date, cell: r => `${fmt.money(r.peak_price)} <span class="sector">(${fmt.date(r.peak_date)})</span>` },
+    { label: '고점 대비', val: r => r.current_drop, cell: r => fmt.pct(r.current_drop) },
+    { label: '고점 랠리', val: r => r.runup, cell: r => fmt.pct(r.runup) },
+    { label: '회복 완주', val: r => r.cycles, cell: r => r.cycles + '회' },
+    { label: `${cfg.LONG_TERM_YEARS}년 수익률`, val: r => r.long_term_return, cell: r => fmt.pct(r.long_term_return) },
+    { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
+  ], 'cand-table', '오늘은 조건 3까지 통과한 종목이 없습니다.');
+
+  makeTable(d.pool, [
+    { label: '티커', val: r => r.ticker, cell: tickerCell },
+    nameCol, sectorCol,
+    { label: '거래대금', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
+    { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
+    { label: '회복 완주', val: r => r.cycles, cell: r => r.cycles + '회' },
+    { label: `${cfg.LONG_TERM_YEARS}년 수익률`, val: r => r.long_term_return, cell: r => fmt.pct(r.long_term_return) },
+    { label: '고점 대비', val: r => r.current_drop, cell: r => fmt.pct(r.current_drop) },
+    { label: '데이터 시작', val: r => r.data_start, cell: r => `<span class="sector">${fmt.date(r.data_start)}</span>` },
+  ], 'pool-table', '조건을 통과한 종목이 없습니다.');
+
+  document.getElementById('footer').innerHTML = `
+    <strong>스크리닝 조건</strong>
+    <ul>
+      <li>조건 1 — ${cfg.LIQUIDITY_YEARS}년 평균 거래대금(종가×거래량) S&amp;P500 상위 ${cfg.LIQUIDITY_TOP_PCT}%. 관심도 = 최근 1개월 평균 거래대금 ÷ ${cfg.LIQUIDITY_YEARS}년 평균.</li>
+      <li>조건 2 — 최근 ${cfg.CYCLE_LOOKBACK_YEARS}년 동안 "낙폭 -${cfg.CYCLE_DRAWDOWN_PCT}% 초과 → 전고점 완전 회복" ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주, 최근 ${cfg.LONG_TERM_YEARS}년 총수익률 &gt; 0. 데이터 ${cfg.MIN_HISTORY_YEARS}년 미만 종목 제외.</li>
+      <li>조건 3 — 최근 ${cfg.PEAK_WINDOW_YEARS}년 내 최고가가 그 시점 1년 전 대비 +${cfg.PEAK_RUNUP_PCT}% 이상 랠리의 결과이고, 현재가가 그 고점 대비 -${cfg.CURRENT_DROP_PCT}% 이상 하락.</li>
+    </ul>
+    가격은 배당·분할 반영 수정종가 기준 (Yahoo Finance). 이 도구는 후보 발굴용이며 매수 판단과 책임은 사용자에게 있습니다.`;
+}
+main().catch(e => {
+  document.getElementById('kpis').innerHTML = `<div class="empty">data.json을 불러오지 못했습니다: ${e}</div>`;
+});
+</script>
+</body>
+</html>
