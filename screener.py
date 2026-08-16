@@ -112,6 +112,7 @@ def analyze_ticker(close: pd.Series, cfg: dict) -> dict | None:
     peak_price = window.max()
     peak_date = window.idxmax()
     pre_peak = close.loc[:peak_date - timedelta(days=365)]
+    ref_date = pre_peak.index[-1] if not pre_peak.empty else None  # 랠리 측정 기준점(고점 1년 전)
     runup = float(peak_price / pre_peak.iloc[-1] - 1.0) * 100 if not pre_peak.empty else None
     current_drop = float(close.iloc[-1] / peak_price - 1.0) * 100
     cond3 = (
@@ -128,6 +129,8 @@ def analyze_ticker(close: pd.Series, cfg: dict) -> dict | None:
         "price": round(float(close.iloc[-1]), 2),
         "peak_price": round(float(peak_price), 2),
         "peak_date": str(peak_date.date()),
+        "ref_date": str(ref_date.date()) if ref_date is not None else None,
+        "ref_price": round(float(pre_peak.iloc[-1]), 2) if ref_date is not None else None,
         "runup": round(runup, 1) if runup is not None else None,
         "current_drop": round(current_drop, 1),
         "cond3": bool(cond3),
@@ -171,7 +174,8 @@ def run() -> dict:
     # ── 조건 2·3 — 조건 1 통과 전 종목의 지표를 계산해 전부 싣는다 (단계별 확인용) ──
     metric_keys = (
         "data_start", "cycles", "long_term_return", "price",
-        "peak_price", "peak_date", "runup", "current_drop", "cond2", "cond3",
+        "peak_price", "peak_date", "ref_date", "ref_price",
+        "runup", "current_drop", "cond2", "cond3",
     )
     meta = members.set_index("ticker")
     stocks, candidates = [], []
@@ -203,6 +207,18 @@ def run() -> dict:
     n_pool = sum(1 for s in stocks if s["cond2"])
     print(f"조건 2 통과(관심 풀): {n_pool}개 / 조건 3 통과(오늘의 후보): {len(candidates)}개")
 
+    # ── 후보 차트용 시계열: 랠리 시작(고점 1년 전) 3개월 앞부터 오늘까지 ──
+    charts = {}
+    for c in candidates:
+        t = c["ticker"]
+        close = data[t]["Close"].dropna()
+        start = pd.Timestamp(c["peak_date"], tz=close.index.tz) - timedelta(days=456)
+        series = close.loc[start:]
+        charts[t] = {
+            "dates": [str(d.date()) for d in series.index],
+            "close": [round(float(v), 2) for v in series.to_numpy()],
+        }
+
     now_utc = datetime.now(timezone.utc)
     return {
         "updated_utc": now_utc.strftime("%Y-%m-%d %H:%M UTC"),
@@ -211,6 +227,7 @@ def run() -> dict:
         "universe_count": len(members),
         "stocks": stocks,
         "candidates": [c["ticker"] for c in candidates],
+        "charts": charts,
     }
 
 

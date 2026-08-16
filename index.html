@@ -67,6 +67,7 @@
 
   section { margin-bottom: 36px; }
   section h2 { font-size: 16px; margin: 0 0 2px; }
+  section h2 .h2-tag { color: var(--muted); font-weight: 400; font-size: 13px; }
   .section-note { font-size: 12.5px; color: var(--muted); margin: 0 0 10px; }
 
   .table-box {
@@ -94,12 +95,47 @@
   .ticker { font-weight: 650; }
   .pos { color: var(--up); }
   .neg { color: var(--down); }
-  .badge {
-    display: inline-block; font-size: 11px; font-weight: 600;
-    color: var(--down); background: var(--down-wash);
-    border-radius: 20px; padding: 1px 8px; margin-left: 6px; vertical-align: 1px;
-  }
   .empty { padding: 28px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+  /* ── 후보 차트 카드 ── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(460px, 100%), 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 14px 8px;
+  }
+  .card-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    gap: 8px; flex-wrap: wrap; margin-bottom: 4px;
+  }
+  .card-head .name { color: var(--ink-2); font-size: 13px; }
+  .card-stats { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .chwrap { position: relative; }
+  .chwrap svg { display: block; width: 100%; height: auto; }
+  .ln { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ln-up { stroke: var(--up); }
+  .ln-down { stroke: var(--down); }
+  .dot-up { fill: var(--up); stroke: var(--surface); stroke-width: 2; }
+  .dot-down { fill: var(--down); stroke: var(--surface); stroke-width: 2; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .thresh { stroke: var(--down); stroke-width: 1; stroke-dasharray: 4 3; opacity: 0.65; }
+  .ch-text { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .ch-label { font-size: 11.5px; fill: var(--ink-2); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .xhair { stroke: var(--muted); stroke-width: 1; opacity: 0; }
+  .tip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 6px 10px; font-size: 12px; line-height: 1.45;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.12); white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip .tip-v { font-weight: 650; }
+  .tip .tip-d { color: var(--muted); font-size: 11.5px; }
 
   footer { border-top: 1px solid var(--grid); padding-top: 16px; color: var(--muted); font-size: 12.5px; }
   footer ul { margin: 6px 0 12px; padding-left: 18px; }
@@ -117,21 +153,15 @@
   <div class="kpis" id="kpis"></div>
 
   <section>
-    <h2>오늘의 후보 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1·2·3 모두 통과 — 급락 진행 중</span></h2>
+    <h2>오늘의 후보 <span class="h2-tag">조건 1·2·3 모두 통과 — 급락 진행 중</span></h2>
     <p class="section-note" id="cand-note"></p>
     <div class="table-box"><div id="cand-table"></div></div>
   </section>
 
   <section>
-    <h2>관심 종목 풀 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1·2 통과 — 유동성 + 사이클 이력</span></h2>
-    <p class="section-note" id="pool-note"></p>
-    <div class="table-box"><div id="pool-table"></div></div>
-  </section>
-
-  <section>
-    <h2>유동성 통과 전체 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1만 적용 — 1단계 필터링 결과</span></h2>
-    <p class="section-note" id="liquid-note"></p>
-    <div class="table-box"><div id="liquid-table"></div></div>
+    <h2>후보 차트 <span class="h2-tag">랠리(빨강) → 고점 → 하락(파랑), 점선은 급락 기준선</span></h2>
+    <p class="section-note" id="chart-note"></p>
+    <div class="cards" id="cards"></div>
   </section>
 
   <footer id="footer"></footer>
@@ -179,11 +209,99 @@ function makeTable(rows, cols, mountId, emptyMsg) {
   render();
 }
 
+function niceStep(raw) {
+  const mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  for (const m of [1, 2, 2.5, 5, 10]) if (raw <= m * mag) return m * mag;
+  return 10 * mag;
+}
+
+function drawChart(mount, ch, m, cfg) {
+  const W = 560, H = 240, ML = 52, MR = 12, MT = 20, MB = 24;
+  const n = ch.close.length;
+  const thresh = m.peak_price * (1 - cfg.CURRENT_DROP_PCT / 100);
+  let lo = Math.min(...ch.close, thresh), hi = Math.max(...ch.close, m.peak_price);
+  const pad = (hi - lo) * 0.08;
+  const y0 = lo - pad, y1 = hi + pad;
+  const xs = i => ML + (W - ML - MR) * (n === 1 ? 0 : i / (n - 1));
+  const ys = v => MT + (H - MT - MB) * (1 - (v - y0) / (y1 - y0));
+  let peakI = ch.dates.indexOf(m.peak_date); if (peakI < 0) peakI = ch.close.indexOf(m.peak_price);
+  let refI = m.ref_date ? ch.dates.indexOf(m.ref_date) : -1;
+
+  const pts = arr => arr.map(i => `${xs(i).toFixed(1)},${ys(ch.close[i]).toFixed(1)}`).join(' ');
+  const idxUp = [], idxDn = [];
+  for (let i = 0; i <= peakI; i++) idxUp.push(i);
+  for (let i = peakI; i < n; i++) idxDn.push(i);
+
+  // y축 눈금 (왼쪽, 3~4개)
+  const step = niceStep((y1 - y0) / 3.5);
+  let gLines = '', first = Math.ceil(y0 / step) * step;
+  for (let v = first; v < y1; v += step) {
+    gLines += `<line class="gridline" x1="${ML}" x2="${W - MR}" y1="${ys(v).toFixed(1)}" y2="${ys(v).toFixed(1)}"/>` +
+              `<text class="ch-text" x="${ML - 8}" y="${(ys(v) + 3.5).toFixed(1)}" text-anchor="end">$${parseFloat(v.toFixed(2)).toLocaleString('en-US')}</text>`;
+  }
+  // x축 눈금 (4개)
+  let xTicks = '';
+  for (let k = 0; k < 4; k++) {
+    const i = Math.round((n - 1) * (k + 0.5) / 4);
+    xTicks += `<text class="ch-text" x="${xs(i).toFixed(1)}" y="${H - 6}" text-anchor="middle">${ch.dates[i].slice(2, 7).replace('-', '.')}</text>`;
+  }
+
+  const peakX = xs(peakI), peakY = ys(m.peak_price);
+  const peakLabelX = Math.min(Math.max(peakX, ML + 40), W - MR - 44);
+  const endY = ys(ch.close[n - 1]);
+  // 끝부분 선이 현재가보다 위에 있으면 라벨을 점 아래로, 아니면 위로
+  const tailTopY = Math.min(...ch.close.slice(Math.floor(n * 0.9)).map(ys));
+  const endLabelY = (tailTopY < endY - 5 && endY + 18 < H - MB) ? endY + 18 : endY - 9;
+
+  mount.querySelector('.chwrap').innerHTML = `
+  <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${m.ticker} 가격 차트">
+    ${gLines}${xTicks}
+    <line class="thresh" x1="${ML}" x2="${W - MR}" y1="${ys(thresh).toFixed(1)}" y2="${ys(thresh).toFixed(1)}"/>
+    <text class="ch-text" x="${ML + 4}" y="${(ys(thresh) - 5).toFixed(1)}" text-anchor="start">고점 -${cfg.CURRENT_DROP_PCT}% 기준선</text>
+    <polyline class="ln ln-up" points="${pts(idxUp)}"/>
+    <polyline class="ln ln-down" points="${pts(idxDn)}"/>
+    ${refI >= 0 ? `<circle class="dot-up" r="4.5" cx="${xs(refI).toFixed(1)}" cy="${ys(ch.close[refI]).toFixed(1)}"/>` : ''}
+    <circle class="dot-up" r="4.5" cx="${peakX.toFixed(1)}" cy="${peakY.toFixed(1)}"/>
+    <circle class="dot-down" r="4.5" cx="${xs(n - 1).toFixed(1)}" cy="${endY.toFixed(1)}"/>
+    <text class="ch-label" x="${peakLabelX.toFixed(1)}" y="${(peakY - 9).toFixed(1)}" text-anchor="middle">${fmt.money(m.peak_price)}</text>
+    <text class="ch-label" x="${(xs(n - 1) - 8).toFixed(1)}" y="${endLabelY.toFixed(1)}" text-anchor="end">${fmt.money(ch.close[n - 1])}</text>
+    <line class="xhair" y1="${MT}" y2="${H - MB}" x1="0" x2="0"/>
+    <rect fill="none" pointer-events="all" x="${ML}" y="${MT}" width="${W - ML - MR}" height="${H - MT - MB}"/>
+  </svg>
+  <div class="tip"></div>`;
+
+  // 크로스헤어 + 툴팁
+  const svg = mount.querySelector('svg');
+  const hair = svg.querySelector('.xhair');
+  const tip = mount.querySelector('.tip');
+  const overlay = svg.querySelector('rect');
+  overlay.addEventListener('pointermove', e => {
+    const box = svg.getBoundingClientRect();
+    const px = (e.clientX - box.left) / box.width * W;
+    const i = Math.max(0, Math.min(n - 1, Math.round((px - ML) / (W - ML - MR) * (n - 1))));
+    const x = xs(i);
+    hair.setAttribute('x1', x); hair.setAttribute('x2', x);
+    hair.style.opacity = 0.5;
+    const vsPeak = (ch.close[i] / m.peak_price - 1) * 100;
+    tip.replaceChildren();
+    const d1 = document.createElement('div'); d1.className = 'tip-v';
+    d1.textContent = `${fmt.money(ch.close[i])} (고점 대비 ${vsPeak > 0 ? '+' : ''}${vsPeak.toFixed(1)}%)`;
+    const d2 = document.createElement('div'); d2.className = 'tip-d';
+    d2.textContent = ch.dates[i];
+    tip.append(d1, d2);
+    const wrapBox = mount.querySelector('.chwrap').getBoundingClientRect();
+    const left = (x / W) * wrapBox.width;
+    tip.style.left = Math.min(left + 12, wrapBox.width - tip.offsetWidth - 4) + 'px';
+    tip.style.top = '8px';
+    tip.style.opacity = 1;
+  });
+  overlay.addEventListener('pointerleave', () => { hair.style.opacity = 0; tip.style.opacity = 0; });
+}
+
 async function main() {
   const res = await fetch('data.json?ts=' + Date.now());
   const d = await res.json();
   const cfg = d.config;
-  const candSet = new Set(d.candidates);
   const pool = d.stocks.filter(s => s.cond2);
   const cands = d.candidates.map(t => d.stocks.find(p => p.ticker === t));
 
@@ -199,12 +317,7 @@ async function main() {
 
   document.getElementById('cand-note').textContent =
     `랠리(고점 시점 1년 전 대비 +${cfg.PEAK_RUNUP_PCT}% 이상)로 만든 최근 ${cfg.PEAK_WINDOW_YEARS}년 내 고점에서 -${cfg.CURRENT_DROP_PCT}% 이상 하락 중인 종목. 낙폭 큰 순.`;
-  document.getElementById('pool-note').textContent =
-    `유동성 통과 종목 중 -${cfg.CYCLE_DRAWDOWN_PCT}% 낙폭 후 전고점 회복을 ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주했고 최근 ${cfg.LONG_TERM_YEARS}년 수익률이 플러스인 종목. 거래대금 순.`;
-  document.getElementById('liquid-note').textContent =
-    `분기(${cfg.SUSTAIN_WINDOW_DAYS}거래일) 이동평균 거래대금이 최근 ${cfg.LIQUIDITY_YEARS}년 내내 $${cfg.MIN_DOLLAR_VOLUME_M}M 이상이었던 종목 전체. 판정 컬럼은 이후 조건에서의 통과·탈락 사유.`;
 
-  const tickerCell = r => `<span class="ticker">${r.ticker}</span>${candSet.has(r.ticker) ? '<span class="badge">급락 중</span>' : ''}`;
   const nameCol = { label: '이름', val: r => r.name, cell: r => `<span class="name">${r.name}</span>` };
   const sectorCol = { label: '섹터', val: r => r.sector, cell: r => `<span class="sector">${r.sector}</span>` };
 
@@ -220,35 +333,27 @@ async function main() {
     { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
   ], 'cand-table', '오늘은 조건 3까지 통과한 종목이 없습니다.');
 
-  makeTable(pool, [
-    { label: '티커', val: r => r.ticker, cell: tickerCell },
-    nameCol, sectorCol,
-    { label: '거래대금', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
-    { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
-    { label: '회복 완주', val: r => r.cycles, cell: r => r.cycles + '회' },
-    { label: `${cfg.LONG_TERM_YEARS}년 수익률`, val: r => r.long_term_return, cell: r => fmt.pct(r.long_term_return) },
-    { label: '고점 대비', val: r => r.current_drop, cell: r => fmt.pct(r.current_drop) },
-    { label: '데이터 시작', val: r => r.data_start, cell: r => `<span class="sector">${fmt.date(r.data_start)}</span>` },
-  ], 'pool-table', '조건을 통과한 종목이 없습니다.');
+  document.getElementById('chart-note').textContent =
+    `구간: 랠리 시작(고점 1년 전) 3개월 앞부터 오늘까지. 왼쪽 점이 랠리 측정 기준점, 위쪽 점이 기준 고점, 오른쪽 점이 현재. 낙폭 큰 순.`;
 
-  const verdict = r => {
-    if (r.cond3) return '<span class="badge">급락 중</span>';
-    if (r.cond2) return '<span class="sector">풀 편입</span>';
-    if (r.cycles === null) return `<span class="sector">데이터 ${cfg.MIN_HISTORY_YEARS}년 미만</span>`;
-    if (r.cycles < cfg.MIN_COMPLETED_CYCLES) return `<span class="sector">완주 ${r.cycles}회 — 이력 부족</span>`;
-    return `<span class="sector">${cfg.LONG_TERM_YEARS}년 수익률 마이너스</span>`;
-  };
-  makeTable(d.stocks, [
-    { label: '티커', val: r => r.ticker, cell: r => `<span class="ticker">${r.ticker}</span>` },
-    nameCol, sectorCol,
-    { label: '거래대금', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
-    { label: '최저 분기평균', val: r => r.roll_min_b, cell: r => '$' + r.roll_min_b.toFixed(2) + 'B' },
-    { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
-    { label: '회복 완주', val: r => r.cycles, cell: r => r.cycles === null ? '—' : r.cycles + '회' },
-    { label: `${cfg.LONG_TERM_YEARS}년 수익률`, val: r => r.long_term_return, cell: r => fmt.pct(r.long_term_return) },
-    { label: '고점 대비', val: r => r.current_drop, cell: r => fmt.pct(r.current_drop) },
-    { label: '판정', val: r => (r.cond3 ? 3 : r.cond2 ? 2 : r.cycles === null ? 0 : 1), cell: verdict },
-  ], 'liquid-table', '조건 1을 통과한 종목이 없습니다.');
+  const cardsEl = document.getElementById('cards');
+  if (!cands.length) {
+    cardsEl.innerHTML = '<div class="empty">표시할 후보가 없습니다.</div>';
+  }
+  for (const m of cands) {
+    const ch = d.charts[m.ticker];
+    if (!ch) continue;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-head">
+        <div><span class="ticker">${m.ticker}</span> <span class="name">${m.name}</span></div>
+        <div class="card-stats">랠리 ${fmt.pct(m.runup)} · 고점 대비 ${fmt.pct(m.current_drop)} · 완주 ${m.cycles}회</div>
+      </div>
+      <div class="chwrap"></div>`;
+    cardsEl.appendChild(card);
+    drawChart(card, ch, m, cfg);
+  }
 
   document.getElementById('footer').innerHTML = `
     <strong>스크리닝 조건</strong>
