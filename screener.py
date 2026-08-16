@@ -24,8 +24,9 @@ import yfinance as yf
 
 CONFIG = {
     # ── 조건 1: 시장의 지속적 관심 ──────────────────────────────
-    "LIQUIDITY_YEARS": 2,          # 평균 거래대금 산정 기간(년)
-    "LIQUIDITY_TOP_PCT": 10,       # 상위 몇 %를 남길지
+    "LIQUIDITY_YEARS": 2,          # 거래대금 검증 기간(년)
+    "MIN_DOLLAR_VOLUME_M": 500,    # 일평균 거래대금 임계값(백만 달러)
+    "SUSTAIN_WINDOW_DAYS": 63,     # 분기(63거래일) 이동평균이 기간 내내 임계값 이상이어야 함
     "INTEREST_RECENT_DAYS": 21,    # 관심도 추세: 최근 1개월(거래일) 평균 거래대금
     # ── 조건 2: 사이클 이력 ────────────────────────────────────
     "CYCLE_LOOKBACK_YEARS": 10,    # 사이클 카운트 대상 기간(년)
@@ -141,27 +142,39 @@ def run() -> dict:
     data = download_history(members["ticker"].tolist(), cfg["CYCLE_LOOKBACK_YEARS"])
     print("다운로드 완료")
 
-    # ── 조건 1: 2년 평균 거래대금 상위 10% ──
+    # ── 조건 1: 분기 이동평균 거래대금이 최근 2년 내내 임계값 이상 ──
     liquidity_days = cfg["LIQUIDITY_YEARS"] * TRADING_DAYS_PER_YEAR
+    threshold = cfg["MIN_DOLLAR_VOLUME_M"] * 1e6
     rows = []
     for t in members["ticker"]:
         if t not in data.columns.get_level_values(0):
             continue
         px = data[t]
-        dollar_vol = (px["Close"] * px["Volume"]).dropna()
-        if len(dollar_vol) < cfg["INTEREST_RECENT_DAYS"]:
+        dollar_vol = (px["Close"] * px["Volume"]).dropna().tail(liquidity_days)
+        if len(dollar_vol) < liquidity_days * 0.8:  # 2년치가 안 되면 "내내 유지" 검증 불가
             continue
-        avg_2y = float(dollar_vol.tail(liquidity_days).mean())
+        rolling = dollar_vol.rolling(cfg["SUSTAIN_WINDOW_DAYS"]).mean().dropna()
+        roll_min = float(rolling.min())
+        if roll_min < threshold:
+            continue
+        avg_2y = float(dollar_vol.mean())
         avg_recent = float(dollar_vol.tail(cfg["INTEREST_RECENT_DAYS"]).mean())
-        rows.append({"ticker": t, "avg_dollar_vol": avg_2y, "interest_ratio": avg_recent / avg_2y})
-    liq = pd.DataFrame(rows).sort_values("avg_dollar_vol", ascending=False).reset_index(drop=True)
-    n_top = max(1, round(len(liq) * cfg["LIQUIDITY_TOP_PCT"] / 100))
-    top_liquid = liq.head(n_top)
-    print(f"조건 1 통과(거래대금 상위 {cfg['LIQUIDITY_TOP_PCT']}%): {len(top_liquid)}개")
+        rows.append({
+            "ticker": t,
+            "avg_dollar_vol": avg_2y,
+            "roll_min": roll_min,
+            "interest_ratio": avg_recent / avg_2y,
+        })
+    top_liquid = pd.DataFrame(rows).sort_values("avg_dollar_vol", ascending=False).reset_index(drop=True)
+    print(f"조건 1 통과(분기평균 거래대금 {cfg['LIQUIDITY_YEARS']}년 내내 ${cfg['MIN_DOLLAR_VOLUME_M']}M 이상): {len(top_liquid)}개")
 
-    # ── 조건 2·3 ──
+    # ── 조건 2·3 — 조건 1 통과 전 종목의 지표를 계산해 전부 싣는다 (단계별 확인용) ──
+    metric_keys = (
+        "data_start", "cycles", "long_term_return", "price",
+        "peak_price", "peak_date", "runup", "current_drop", "cond2", "cond3",
+    )
     meta = members.set_index("ticker")
-    pool, candidates = [], []
+    stocks, candidates = [], []
     for _, liq_row in top_liquid.iterrows():
         t = liq_row["ticker"]
         try:
@@ -169,26 +182,26 @@ def run() -> dict:
         except Exception as e:
             print(f"  [건너뜀] {t}: {e}", file=sys.stderr)
             continue
-        if metrics is None or not metrics["cond2"]:
-            continue
         entry = {
             "ticker": t,
             "name": meta.loc[t, "name"],
             "sector": meta.loc[t, "sector"],
             "avg_dollar_vol_b": round(liq_row["avg_dollar_vol"] / 1e9, 2),  # 십억 달러
+            "roll_min_b": round(liq_row["roll_min"] / 1e9, 2),
             "interest_ratio": round(liq_row["interest_ratio"], 2),
-            **{k: metrics[k] for k in (
-                "data_start", "cycles", "long_term_return", "price",
-                "peak_price", "peak_date", "runup", "current_drop", "cond3",
-            )},
+            # 데이터 5년 미만이면 지표 없이 조건 2 탈락 처리
+            **(dict.fromkeys(metric_keys) if metrics is None else {k: metrics[k] for k in metric_keys}),
         }
-        pool.append(entry)
-        if metrics["cond3"]:
+        entry["cond2"] = bool(entry["cond2"])
+        entry["cond3"] = bool(entry["cond3"])
+        stocks.append(entry)
+        if entry["cond2"] and entry["cond3"]:
             candidates.append(entry)
 
-    pool.sort(key=lambda x: -x["avg_dollar_vol_b"])
+    stocks.sort(key=lambda x: -x["avg_dollar_vol_b"])
     candidates.sort(key=lambda x: x["current_drop"])
-    print(f"조건 2 통과(관심 풀): {len(pool)}개 / 조건 3 통과(오늘의 후보): {len(candidates)}개")
+    n_pool = sum(1 for s in stocks if s["cond2"])
+    print(f"조건 2 통과(관심 풀): {n_pool}개 / 조건 3 통과(오늘의 후보): {len(candidates)}개")
 
     now_utc = datetime.now(timezone.utc)
     return {
@@ -196,8 +209,7 @@ def run() -> dict:
         "updated_kst": (now_utc + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M KST"),
         "config": cfg,
         "universe_count": len(members),
-        "liquid_count": len(top_liquid),
-        "pool": pool,
+        "stocks": stocks,
         "candidates": [c["ticker"] for c in candidates],
     }
 

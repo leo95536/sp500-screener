@@ -128,6 +128,12 @@
     <div class="table-box"><div id="pool-table"></div></div>
   </section>
 
+  <section>
+    <h2>유동성 통과 전체 <span style="color:var(--muted);font-weight:400;font-size:13px">조건 1만 적용 — 1단계 필터링 결과</span></h2>
+    <p class="section-note" id="liquid-note"></p>
+    <div class="table-box"><div id="liquid-table"></div></div>
+  </section>
+
   <footer id="footer"></footer>
 </div>
 
@@ -178,14 +184,15 @@ async function main() {
   const d = await res.json();
   const cfg = d.config;
   const candSet = new Set(d.candidates);
-  const cands = d.candidates.map(t => d.pool.find(p => p.ticker === t));
+  const pool = d.stocks.filter(s => s.cond2);
+  const cands = d.candidates.map(t => d.stocks.find(p => p.ticker === t));
 
   document.getElementById('updated').textContent = `업데이트 ${d.updated_kst}`;
 
   document.getElementById('kpis').innerHTML = [
     ['S&P500 종목', d.universe_count, ''],
-    [`거래대금 상위 ${cfg.LIQUIDITY_TOP_PCT}%`, d.liquid_count, '조건 1'],
-    ['관심 종목 풀', d.pool.length, '조건 1+2'],
+    [`거래대금 $${cfg.MIN_DOLLAR_VOLUME_M}M+ 유지`, d.stocks.length, '조건 1'],
+    ['관심 종목 풀', pool.length, '조건 1+2'],
     ['오늘의 후보', d.candidates.length, '조건 1+2+3'],
   ].map(([label, v, tag]) =>
     `<div class="kpi"><div class="label">${label}</div><div class="value">${v}<small> ${tag}</small></div></div>`).join('');
@@ -193,7 +200,9 @@ async function main() {
   document.getElementById('cand-note').textContent =
     `랠리(고점 시점 1년 전 대비 +${cfg.PEAK_RUNUP_PCT}% 이상)로 만든 최근 ${cfg.PEAK_WINDOW_YEARS}년 내 고점에서 -${cfg.CURRENT_DROP_PCT}% 이상 하락 중인 종목. 낙폭 큰 순.`;
   document.getElementById('pool-note').textContent =
-    `${cfg.LIQUIDITY_YEARS}년 평균 거래대금 상위 ${cfg.LIQUIDITY_TOP_PCT}% 중 -${cfg.CYCLE_DRAWDOWN_PCT}% 낙폭 후 전고점 회복을 ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주했고 최근 ${cfg.LONG_TERM_YEARS}년 수익률이 플러스인 종목. 거래대금 순.`;
+    `유동성 통과 종목 중 -${cfg.CYCLE_DRAWDOWN_PCT}% 낙폭 후 전고점 회복을 ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주했고 최근 ${cfg.LONG_TERM_YEARS}년 수익률이 플러스인 종목. 거래대금 순.`;
+  document.getElementById('liquid-note').textContent =
+    `분기(${cfg.SUSTAIN_WINDOW_DAYS}거래일) 이동평균 거래대금이 최근 ${cfg.LIQUIDITY_YEARS}년 내내 $${cfg.MIN_DOLLAR_VOLUME_M}M 이상이었던 종목 전체. 판정 컬럼은 이후 조건에서의 통과·탈락 사유.`;
 
   const tickerCell = r => `<span class="ticker">${r.ticker}</span>${candSet.has(r.ticker) ? '<span class="badge">급락 중</span>' : ''}`;
   const nameCol = { label: '이름', val: r => r.name, cell: r => `<span class="name">${r.name}</span>` };
@@ -211,7 +220,7 @@ async function main() {
     { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
   ], 'cand-table', '오늘은 조건 3까지 통과한 종목이 없습니다.');
 
-  makeTable(d.pool, [
+  makeTable(pool, [
     { label: '티커', val: r => r.ticker, cell: tickerCell },
     nameCol, sectorCol,
     { label: '거래대금', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
@@ -222,10 +231,29 @@ async function main() {
     { label: '데이터 시작', val: r => r.data_start, cell: r => `<span class="sector">${fmt.date(r.data_start)}</span>` },
   ], 'pool-table', '조건을 통과한 종목이 없습니다.');
 
+  const verdict = r => {
+    if (r.cond3) return '<span class="badge">급락 중</span>';
+    if (r.cond2) return '<span class="sector">풀 편입</span>';
+    if (r.cycles === null) return `<span class="sector">데이터 ${cfg.MIN_HISTORY_YEARS}년 미만</span>`;
+    if (r.cycles < cfg.MIN_COMPLETED_CYCLES) return `<span class="sector">완주 ${r.cycles}회 — 이력 부족</span>`;
+    return `<span class="sector">${cfg.LONG_TERM_YEARS}년 수익률 마이너스</span>`;
+  };
+  makeTable(d.stocks, [
+    { label: '티커', val: r => r.ticker, cell: r => `<span class="ticker">${r.ticker}</span>` },
+    nameCol, sectorCol,
+    { label: '거래대금', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
+    { label: '최저 분기평균', val: r => r.roll_min_b, cell: r => '$' + r.roll_min_b.toFixed(2) + 'B' },
+    { label: '관심도', val: r => r.interest_ratio, cell: r => r.interest_ratio.toFixed(2) + '×' },
+    { label: '회복 완주', val: r => r.cycles, cell: r => r.cycles === null ? '—' : r.cycles + '회' },
+    { label: `${cfg.LONG_TERM_YEARS}년 수익률`, val: r => r.long_term_return, cell: r => fmt.pct(r.long_term_return) },
+    { label: '고점 대비', val: r => r.current_drop, cell: r => fmt.pct(r.current_drop) },
+    { label: '판정', val: r => (r.cond3 ? 3 : r.cond2 ? 2 : r.cycles === null ? 0 : 1), cell: verdict },
+  ], 'liquid-table', '조건 1을 통과한 종목이 없습니다.');
+
   document.getElementById('footer').innerHTML = `
     <strong>스크리닝 조건</strong>
     <ul>
-      <li>조건 1 — ${cfg.LIQUIDITY_YEARS}년 평균 거래대금(종가×거래량) S&amp;P500 상위 ${cfg.LIQUIDITY_TOP_PCT}%. 관심도 = 최근 1개월 평균 거래대금 ÷ ${cfg.LIQUIDITY_YEARS}년 평균.</li>
+      <li>조건 1 — 분기(${cfg.SUSTAIN_WINDOW_DAYS}거래일) 이동평균 거래대금(종가×거래량)이 최근 ${cfg.LIQUIDITY_YEARS}년 내내 $${cfg.MIN_DOLLAR_VOLUME_M}M 이상. 관심도 = 최근 1개월 평균 거래대금 ÷ ${cfg.LIQUIDITY_YEARS}년 평균.</li>
       <li>조건 2 — 최근 ${cfg.CYCLE_LOOKBACK_YEARS}년 동안 "낙폭 -${cfg.CYCLE_DRAWDOWN_PCT}% 초과 → 전고점 완전 회복" ${cfg.MIN_COMPLETED_CYCLES}회 이상 완주, 최근 ${cfg.LONG_TERM_YEARS}년 총수익률 &gt; 0. 데이터 ${cfg.MIN_HISTORY_YEARS}년 미만 종목 제외.</li>
       <li>조건 3 — 최근 ${cfg.PEAK_WINDOW_YEARS}년 내 최고가가 그 시점 1년 전 대비 +${cfg.PEAK_RUNUP_PCT}% 이상 랠리의 결과이고, 현재가가 그 고점 대비 -${cfg.CURRENT_DROP_PCT}% 이상 하락.</li>
     </ul>
