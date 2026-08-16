@@ -241,7 +241,7 @@ function renderBig(box, ch, state) {
   const tone = up ? 'ts-up' : 'ts-down';
   const stroke = up ? 'var(--tsu)' : 'var(--tsd)';
 
-  const W = 1000, H = 300, ML = 14, MR = 14, MT = 40, MB = 30;
+  const W = 1000, H = 300, ML = 14, MR = 14, MT = 40, MB = 40;
   const lo = Math.min(...C), hi = Math.max(...C);
   const pad = (hi - lo) * 0.05 || 1;
   const a = lo - pad, b = hi + pad;
@@ -254,6 +254,14 @@ function renderBig(box, ch, state) {
   const iHi = C.indexOf(hi), iLo = C.indexOf(lo);
   const clampX = x => Math.min(Math.max(x, 46), W - 46);
   const gid = `g-${ch.ticker}-${up ? 'u' : 'd'}`;
+
+  const short = ['1주', '1달', '3달'].includes(state.range);
+  const xdate = s => short ? s.replaceAll('-', '.') : s.slice(0, 7).replace('-', '.');
+  let xTicks = '';
+  for (let k = 0; k < 4; k++) {
+    const i = Math.round((n - 1) * (k + 0.5) / 4);
+    xTicks += `<text class="ts-minmax" x="${xs(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${xdate(D[i])}</text>`;
+  }
 
   const pctOf = v => {
     const p = (v / C[0] - 1) * 100;
@@ -273,6 +281,7 @@ function renderBig(box, ch, state) {
         </defs>
         <path d="${area}" fill="url(#${gid})"/>
         <polyline class="ts-line" stroke="${stroke}" points="${pts}"/>
+        ${xTicks}
         <text class="ts-minmax" x="${clampX(xs(iHi)).toFixed(1)}" y="${(ys(hi) - 10).toFixed(1)}" text-anchor="middle">최고 ${fmt.money(hi)}</text>
         <text class="ts-minmax" x="${clampX(xs(iLo)).toFixed(1)}" y="${(ys(lo) + 18).toFixed(1)}" text-anchor="middle">최저 ${fmt.money(lo)}</text>
         <line class="ts-hair" y1="${MT - 14}" y2="${H - MB + 8}" x1="0" x2="0"/>
