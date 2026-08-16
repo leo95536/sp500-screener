@@ -8,6 +8,8 @@
 """
 
 import json
+import os
+import shutil
 import time
 from datetime import datetime, timedelta, timezone
 from io import StringIO
@@ -21,6 +23,7 @@ CONFIG = {
     "MIN_DOLLAR_VOLUME_M": 500,    # 일평균 거래대금 임계값(백만 달러)
     "SUSTAIN_WINDOW_DAYS": 63,     # 분기(63거래일) 이동평균이 기간 내내 임계값 이상이어야 함
     "INTEREST_RECENT_DAYS": 21,    # 관심도 추세: 최근 1개월(거래일) 평균 거래대금
+    "CHART_YEARS": 10,             # 종목별 차트 제공 기간(년)
 }
 
 TRADING_DAYS_PER_YEAR = 252
@@ -47,7 +50,7 @@ def run() -> dict:
 
     data = yf.download(
         members["ticker"].tolist(),
-        period=f"{cfg['LIQUIDITY_YEARS']}y",
+        period=f"{max(cfg['CHART_YEARS'], cfg['LIQUIDITY_YEARS'])}y",
         interval="1d",
         auto_adjust=True,
         group_by="ticker",
@@ -86,6 +89,19 @@ def run() -> dict:
 
     stocks.sort(key=lambda x: -x["avg_dollar_vol_b"])
     print(f"조건 1 통과(분기평균 거래대금 {cfg['LIQUIDITY_YEARS']}년 내내 ${cfg['MIN_DOLLAR_VOLUME_M']}M 이상): {len(stocks)}개")
+
+    # ── 통과 종목별 10년 일봉 차트 파일 (대시보드가 행 클릭 시 fetch) ──
+    shutil.rmtree("charts", ignore_errors=True)
+    os.makedirs("charts")
+    for s in stocks:
+        close = data[s["ticker"]]["Close"].dropna()
+        with open(f"charts/{s['ticker']}.json", "w") as f:
+            json.dump({
+                "ticker": s["ticker"],
+                "dates": [str(d.date()) for d in close.index],
+                "close": [float(f"{v:.6g}") for v in close.to_numpy()],
+            }, f, separators=(",", ":"))
+    print(f"차트 파일 {len(stocks)}개 저장 완료")
 
     now_utc = datetime.now(timezone.utc)
     return {
