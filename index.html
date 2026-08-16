@@ -84,6 +84,7 @@
   }
   thead th:hover { color: var(--ink); }
   thead th .arrow { font-size: 10px; }
+  thead th .arrow.dim { opacity: 0.4; }
   tbody tr { border-bottom: 1px solid var(--grid); }
   tbody tr:last-child { border-bottom: none; }
   tbody tr:hover { background: var(--row-hover); }
@@ -140,7 +141,7 @@ function makeTable(rows, cols, mountId, emptyMsg) {
       });
     }
     const head = cols.map((c, i) =>
-      `<th data-i="${i}">${c.label}${i === sortKey ? `<span class="arrow"> ${sortDir < 0 ? '▼' : '▲'}</span>` : ''}</th>`).join('');
+      `<th data-i="${i}">${c.label}<span class="arrow${i === sortKey ? '' : ' dim'}"> ${i === sortKey ? (sortDir < 0 ? '▼' : '▲') : '↕'}</span></th>`).join('');
     const body = sorted.map(r =>
       `<tr>${cols.map(c => `<td class="num">${c.cell(r)}</td>`).join('')}</tr>`).join('');
     mount.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
