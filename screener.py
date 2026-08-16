@@ -128,12 +128,16 @@ def run() -> dict:
     shutil.rmtree("charts", ignore_errors=True)
     os.makedirs("charts")
     for s in stocks:
-        close = data[s["ticker"]]["Close"].dropna()
+        px = data[s["ticker"]][["Open", "High", "Low", "Close"]].dropna()
+        compact = lambda col: [float(f"{v:.6g}") for v in px[col].to_numpy()]
         with open(f"charts/{s['ticker']}.json", "w") as f:
             json.dump({
                 "ticker": s["ticker"],
-                "dates": [str(d.date()) for d in close.index],
-                "close": [float(f"{v:.6g}") for v in close.to_numpy()],
+                "dates": [str(d.date()) for d in px.index],
+                "open": compact("Open"),
+                "high": compact("High"),
+                "low": compact("Low"),
+                "close": compact("Close"),
             }, f, separators=(",", ":"))
     print(f"차트 파일 {len(stocks)}개 저장 완료")
 
