@@ -335,7 +335,10 @@ async function main() {
 
   makeTable(d.stocks, [
     { label: '티커', val: r => r.ticker, cell: r => `<span class="ticker">${r.ticker}</span>` },
-    { label: '이름', val: r => r.name, cell: r => `<span class="name">${r.name}</span>` },
+    { label: '이름', val: r => r.name_kr || r.name, cell: r =>
+      r.name_kr && r.name_kr !== r.name
+        ? `<span class="name">${r.name_kr}</span> <span class="sector">${r.name}</span>`
+        : `<span class="name">${r.name}</span>` },
     { label: '섹터', val: r => r.sector, cell: r => `<span class="sector">${r.sector}</span>` },
     { label: '현재가', val: r => r.price, cell: r => fmt.money(r.price) },
     { label: '거래대금 (2년 평균)', val: r => r.avg_dollar_vol_b, cell: r => '$' + r.avg_dollar_vol_b.toFixed(2) + 'B' },
