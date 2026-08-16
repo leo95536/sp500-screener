@@ -125,6 +125,11 @@
     font-size: 11px; color: var(--muted); padding: 1px 7px;
     opacity: 0; pointer-events: none; white-space: nowrap;
   }
+  .ts-brush { display: block; width: 100%; height: auto; margin-top: 4px; touch-action: none; }
+  .ts-bl { fill: none; stroke: var(--muted); stroke-width: 1.2; opacity: 0.8; }
+  .ts-dim { fill: var(--page); opacity: 0.6; }
+  .ts-win { fill: var(--row-hover); stroke: var(--muted); stroke-width: 1; }
+  .ts-handle { fill: var(--muted); }
   .ts-tabs { display: flex; gap: 4px; margin-top: 4px; }
   .ts-tab {
     flex: 1; text-align: center; font-size: 13px; font-weight: 600; font-family: inherit;
@@ -215,7 +220,7 @@ async function loadChart(box, r) {
   box.innerHTML = '<div class="ch-loading">차트 불러오는 중…</div>';
   try {
     const ch = await (await fetch(`charts/${r.ticker}.json?ts=${Date.now()}`)).json();
-    const state = { range: '전체', type: 'line' };
+    const state = { preset: '전체', type: 'line', i0: null, i1: null };
     renderBig(box, ch, state);
   } catch (e) {
     box.innerHTML = '<div class="ch-loading">차트를 불러오지 못했습니다</div>';
@@ -227,8 +232,7 @@ const TS_LABELS = {
   '1주': '1주일 전보다', '1달': '1달 전보다', '3달': '3달 전보다',
   '1년': '1년 전보다', '5년': '5년 전보다', '전체': '10년 전보다',
 };
-// 캔들 모드에서 기간별 봉 단위 (일봉이 뭉개지지 않도록 토스처럼 자동 전환)
-const TS_BUCKET = { '1주': 'd', '1달': 'd', '3달': 'd', '1년': 'w', '5년': 'm', '전체': 'm' };
+// 캔들 봉 단위는 보이는 구간 길이에 따라 자동 전환 (일봉이 뭉개지지 않도록)
 const TS_BUCKET_NAME = { d: '일봉', w: '주봉', m: '월봉' };
 
 function tsAggregate(D, O, Hh, L, C, unit) {
@@ -256,152 +260,260 @@ function tsAggregate(D, O, Hh, L, C, unit) {
 
 function renderBig(box, ch, state) {
   const nAll = ch.close.length;
-  const days = TS_RANGES[state.range];
-  let s0 = 0;
-  if (days !== null) {
-    const lastDate = new Date(ch.dates[nAll - 1]);
-    const startStr = new Date(lastDate.getTime() - days * 86400e3).toISOString().slice(0, 10);
-    s0 = ch.dates.findIndex(d => d >= startStr);
-    if (s0 < 0) s0 = 0;
-  }
-  const C = ch.close.slice(s0), D = ch.dates.slice(s0);
-  const candle = state.type === 'candle';
-  const unit = TS_BUCKET[state.range];
-  const B = candle ? tsAggregate(D, ch.open.slice(s0), ch.high.slice(s0), ch.low.slice(s0), C, unit) : null;
-  const n = candle ? B.length : C.length;
-  const closeAt = i => candle ? B[i].c : C[i];
-  const dateAt = i => candle ? B[i].d : D[i];
-  const up = C[C.length - 1] >= C[0];
-  const tone = up ? 'ts-up' : 'ts-down';
-  const stroke = up ? 'var(--tsu)' : 'var(--tsd)';
-
   const W = 1000, H = 300, ML = 14, MR = 14, MT = 40, MB = 40;
-  const lo = candle ? Math.min(...B.map(x => x.l)) : Math.min(...C);
-  const hi = candle ? Math.max(...B.map(x => x.h)) : Math.max(...C);
-  const pad = (hi - lo) * 0.05 || 1;
-  const a = lo - pad, b = hi + pad;
-  const slot = (W - ML - MR) / n;
-  const xs = candle
-    ? (i => ML + slot * (i + 0.5))
-    : (i => ML + (W - ML - MR) * (n === 1 ? 0 : i / (n - 1)));
-  const ys = v => MT + (H - MT - MB) * (1 - (v - a) / (b - a));
+  const PW = W - ML - MR;
+  const BH = 46;
 
-  let marks;
-  if (candle) {
-    const bw = Math.max(2.4, Math.min(14, slot * 0.62));
-    marks = B.map((k, i) => {
-      const x = xs(i);
-      const col = k.c >= k.o ? 'var(--tsu)' : 'var(--tsd)';
-      const yO = ys(k.o), yC = ys(k.c);
-      const top = Math.min(yO, yC), hgt = Math.max(1.4, Math.abs(yO - yC));
-      return `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${ys(k.h).toFixed(1)}" y2="${ys(k.l).toFixed(1)}" stroke="${col}" stroke-width="1"/>` +
-             `<rect x="${(x - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${hgt.toFixed(1)}" fill="${col}" rx="1"/>`;
-    }).join('');
-  } else {
-    const pts = C.map((v, i) => `${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(' ');
-    const area = `M${xs(0).toFixed(1)},${(H - MB)} L${pts.replaceAll(' ', ' L')} L${xs(n - 1).toFixed(1)},${H - MB} Z`;
-    marks = `<path d="${area}" fill="url(#g-${ch.ticker})"/><polyline class="ts-line" stroke="${stroke}" points="${pts}"/>`;
+  function applyPreset() {
+    const days = TS_RANGES[state.preset];
+    let s0 = 0;
+    if (days !== null) {
+      const lastDate = new Date(ch.dates[nAll - 1]);
+      const startStr = new Date(lastDate.getTime() - days * 86400e3).toISOString().slice(0, 10);
+      s0 = ch.dates.findIndex(d => d >= startStr);
+      if (s0 < 0) s0 = 0;
+    }
+    state.i0 = s0;
+    state.i1 = nAll - 1;
   }
+  if (state.i0 === null) applyPreset();
 
-  const iHi = candle ? B.findIndex(k => k.h === hi) : C.indexOf(hi);
-  const iLo = candle ? B.findIndex(k => k.l === lo) : C.indexOf(lo);
-  const clampX = x => Math.min(Math.max(x, 46), W - 46);
-
-  const short = ['1주', '1달', '3달'].includes(state.range);
-  const xdate = s => short ? s.replaceAll('-', '.') : s.slice(0, 7).replace('-', '.');
-  let xTicks = '';
-  for (let k = 0; k < 4; k++) {
-    const i = Math.round((n - 1) * (k + 0.5) / 4);
-    xTicks += `<text class="ts-minmax" x="${xs(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${xdate(dateAt(i))}</text>`;
-  }
-
-  const pctOf = v => {
-    const p = (v / C[0] - 1) * 100;
-    return (p >= 0 ? '+' : '') + p.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
-  };
+  // ── 브러시(미니맵)용 10년 전체 축소 라인 ──
+  const bxAll = i => ML + PW * i / (nAll - 1);
+  const bLo = Math.min(...ch.close), bHi = Math.max(...ch.close);
+  const bys = v => 6 + (BH - 12) * (1 - (v - bLo) / (bHi - bLo || 1));
+  const bstep = Math.max(1, Math.ceil(nAll / 500));
+  let bpts = '';
+  for (let i = 0; i < nAll; i += bstep) bpts += `${bxAll(i).toFixed(1)},${bys(ch.close[i]).toFixed(1)} `;
+  bpts += `${bxAll(nAll - 1).toFixed(1)},${bys(ch.close[nAll - 1]).toFixed(1)}`;
 
   box.innerHTML = `
     <div class="ts-headrow">
       <div>
-        <div class="ts-price">${fmt.money(C[C.length - 1])}</div>
-        <div class="ts-sub ${tone}">${TS_LABELS[state.range]} ${pctOf(C[C.length - 1])}<span class="dt"></span></div>
+        <div class="ts-price"></div>
+        <div class="ts-sub"><span class="lbl"></span><span class="dt"></span></div>
       </div>
       <div class="ts-type">
-        <button class="ts-tab${candle ? '' : ' on'}" data-t="line">선</button>
-        <button class="ts-tab${candle ? ' on' : ''}" data-t="candle">캔들${candle ? ' · ' + TS_BUCKET_NAME[unit] : ''}</button>
+        <button class="ts-tab${state.type === 'line' ? ' on' : ''}" data-t="line">선</button>
+        <button class="ts-tab${state.type === 'candle' ? ' on' : ''}" data-t="candle">캔들</button>
       </div>
     </div>
     <div class="chwrap">
-      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${ch.ticker} ${state.range} 차트">
-        <defs>
-          <linearGradient id="g-${ch.ticker}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="${stroke}" stop-opacity="0.14"/>
-            <stop offset="1" stop-color="${stroke}" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        ${marks}
-        ${xTicks}
-        <text class="ts-minmax" x="${clampX(xs(iHi)).toFixed(1)}" y="${(ys(hi) - 10).toFixed(1)}" text-anchor="middle">최고 ${fmt.money(hi)}</text>
-        <text class="ts-minmax" x="${clampX(xs(iLo)).toFixed(1)}" y="${(ys(lo) + 18).toFixed(1)}" text-anchor="middle">최저 ${fmt.money(lo)}</text>
-        <line class="ts-hair" y1="${MT - 14}" y2="${H - MB + 8}" x1="0" x2="0"/>
-        <circle class="ts-dot" r="4.5" fill="${stroke}"/>
-        <rect fill="none" pointer-events="all" x="${ML}" y="0" width="${W - ML - MR}" height="${H}"/>
-      </svg>
+      <svg class="ts-main" viewBox="0 0 ${W} ${H}" role="img" aria-label="${ch.ticker} 차트"></svg>
       <div class="ts-datepill"></div>
     </div>
+    <svg class="ts-brush" viewBox="0 0 ${W} ${BH}">
+      <polyline class="ts-bl" points="${bpts}"/>
+      <rect class="ts-dim dimL" y="0" height="${BH}" x="0" width="0"/>
+      <rect class="ts-dim dimR" y="0" height="${BH}" x="0" width="0"/>
+      <rect class="ts-win" y="1" height="${BH - 2}" rx="5"/>
+      <rect class="ts-handle hL" y="${BH / 2 - 9}" width="5" height="18" rx="2.5"/>
+      <rect class="ts-handle hR" y="${BH / 2 - 9}" width="5" height="18" rx="2.5"/>
+    </svg>
     <div class="ts-tabs">
-      ${Object.keys(TS_RANGES).map(k => `<button class="ts-tab${state.range === k ? ' on' : ''}" data-r="${k}">${k}</button>`).join('')}
+      ${Object.keys(TS_RANGES).map(k => `<button class="ts-tab" data-r="${k}">${k}</button>`).join('')}
     </div>`;
+
+  const mainSvg = box.querySelector('.ts-main');
+  const pill = box.querySelector('.ts-datepill');
+  const priceEl = box.querySelector('.ts-price');
+  const subEl = box.querySelector('.ts-sub');
+  const lblEl = subEl.querySelector('.lbl');
+  const dtEl = subEl.querySelector('.dt');
+  const brush = box.querySelector('.ts-brush');
+  const xdateFull = s => s.replaceAll('-', '.');
+
+  function updateBrush() {
+    const xl = bxAll(state.i0), xr = bxAll(state.i1);
+    brush.querySelector('.dimL').setAttribute('width', Math.max(0, xl).toFixed(1));
+    const dimR = brush.querySelector('.dimR');
+    dimR.setAttribute('x', xr.toFixed(1));
+    dimR.setAttribute('width', Math.max(0, W - xr).toFixed(1));
+    const win = brush.querySelector('.ts-win');
+    win.setAttribute('x', xl.toFixed(1));
+    win.setAttribute('width', Math.max(1, xr - xl).toFixed(1));
+    brush.querySelector('.hL').setAttribute('x', (xl - 2.5).toFixed(1));
+    brush.querySelector('.hR').setAttribute('x', (xr - 2.5).toFixed(1));
+  }
+
+  function drawMain() {
+    const i0 = state.i0, i1 = state.i1;
+    const C = ch.close.slice(i0, i1 + 1);
+    const D = ch.dates.slice(i0, i1 + 1);
+    const candle = state.type === 'candle';
+    const spanDays = (new Date(D[D.length - 1]) - new Date(D[0])) / 86400e3;
+    const unit = spanDays <= 190 ? 'd' : spanDays <= 950 ? 'w' : 'm';
+    const B = candle
+      ? tsAggregate(D, ch.open.slice(i0, i1 + 1), ch.high.slice(i0, i1 + 1), ch.low.slice(i0, i1 + 1), C, unit)
+      : null;
+    const n = candle ? B.length : C.length;
+    const closeAt = i => candle ? B[i].c : C[i];
+    const dateAt = i => candle ? B[i].d : D[i];
+    const up = C[C.length - 1] >= C[0];
+    const tone = up ? 'ts-up' : 'ts-down';
+    const stroke = up ? 'var(--tsu)' : 'var(--tsd)';
+
+    const lo = candle ? Math.min(...B.map(x => x.l)) : Math.min(...C);
+    const hi = candle ? Math.max(...B.map(x => x.h)) : Math.max(...C);
+    const pad = (hi - lo) * 0.05 || 1;
+    const a = lo - pad, b = hi + pad;
+    const slot = PW / n;
+    const xs = candle
+      ? (i => ML + slot * (i + 0.5))
+      : (i => ML + PW * (n === 1 ? 0 : i / (n - 1)));
+    const ys = v => MT + (H - MT - MB) * (1 - (v - a) / (b - a));
+
+    let marks;
+    if (candle) {
+      const bw = Math.max(2.4, Math.min(14, slot * 0.62));
+      marks = B.map((k, i) => {
+        const x = xs(i);
+        const col = k.c >= k.o ? 'var(--tsu)' : 'var(--tsd)';
+        const yO = ys(k.o), yC = ys(k.c);
+        const top = Math.min(yO, yC), hgt = Math.max(1.4, Math.abs(yO - yC));
+        return `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${ys(k.h).toFixed(1)}" y2="${ys(k.l).toFixed(1)}" stroke="${col}" stroke-width="1"/>` +
+               `<rect x="${(x - bw / 2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${hgt.toFixed(1)}" fill="${col}" rx="1"/>`;
+      }).join('');
+    } else {
+      const pts = C.map((v, i) => `${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(' ');
+      const area = `M${xs(0).toFixed(1)},${(H - MB)} L${pts.replaceAll(' ', ' L')} L${xs(n - 1).toFixed(1)},${H - MB} Z`;
+      marks = `<defs><linearGradient id="g-${ch.ticker}" x1="0" y1="0" x2="0" y2="1">` +
+              `<stop offset="0" stop-color="${stroke}" stop-opacity="0.14"/><stop offset="1" stop-color="${stroke}" stop-opacity="0"/>` +
+              `</linearGradient></defs><path d="${area}" fill="url(#g-${ch.ticker})"/><polyline class="ts-line" stroke="${stroke}" points="${pts}"/>`;
+    }
+
+    const iHi = candle ? B.findIndex(k => k.h === hi) : C.indexOf(hi);
+    const iLo = candle ? B.findIndex(k => k.l === lo) : C.indexOf(lo);
+    const clampX = x => Math.min(Math.max(x, 46), W - 46);
+
+    const short = spanDays <= 190;
+    const xdate = s => short ? s.replaceAll('-', '.') : s.slice(0, 7).replace('-', '.');
+    let xTicks = '';
+    for (let k = 0; k < 4; k++) {
+      const i = Math.round((n - 1) * (k + 0.5) / 4);
+      xTicks += `<text class="ts-minmax" x="${xs(i).toFixed(1)}" y="${H - 10}" text-anchor="middle">${xdate(dateAt(i))}</text>`;
+    }
+
+    const pctOf = v => {
+      const p = (v / C[0] - 1) * 100;
+      return (p >= 0 ? '+' : '') + p.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
+    };
+
+    mainSvg.innerHTML = `
+      ${marks}
+      ${xTicks}
+      <text class="ts-minmax" x="${clampX(xs(iHi)).toFixed(1)}" y="${(ys(hi) - 10).toFixed(1)}" text-anchor="middle">최고 ${fmt.money(hi)}</text>
+      <text class="ts-minmax" x="${clampX(xs(iLo)).toFixed(1)}" y="${(ys(lo) + 18).toFixed(1)}" text-anchor="middle">최저 ${fmt.money(lo)}</text>
+      <line class="ts-hair" y1="${MT - 14}" y2="${H - MB + 8}" x1="0" x2="0"/>
+      <circle class="ts-dot" r="4.5" fill="${stroke}"/>
+      <rect class="ov" fill="none" pointer-events="all" x="${ML}" y="0" width="${PW}" height="${H}"/>`;
+
+    const baseLabel = (state.preset && state.i1 === nAll - 1)
+      ? TS_LABELS[state.preset]
+      : `${xdateFull(D[0])} 이후`;
+    priceEl.textContent = fmt.money(C[C.length - 1]);
+    subEl.className = `ts-sub ${tone}`;
+    lblEl.textContent = `${baseLabel} ${pctOf(C[C.length - 1])}`;
+    dtEl.textContent = '';
+    box.querySelectorAll('.ts-tab[data-r]').forEach(bn => bn.classList.toggle('on', bn.dataset.r === state.preset));
+    box.querySelector('[data-t="candle"]').textContent = candle ? `캔들 · ${TS_BUCKET_NAME[unit]}` : '캔들';
+
+    const hair = mainSvg.querySelector('.ts-hair');
+    const dot = mainSvg.querySelector('.ts-dot');
+    const overlay = mainSvg.querySelector('.ov');
+    overlay.addEventListener('pointermove', e => {
+      const bx = mainSvg.getBoundingClientRect();
+      const px = (e.clientX - bx.left) / bx.width * W;
+      const i = candle
+        ? Math.max(0, Math.min(n - 1, Math.floor((px - ML) / slot)))
+        : Math.max(0, Math.min(n - 1, Math.round((px - ML) / PW * (n - 1))));
+      const x = xs(i);
+      hair.setAttribute('x1', x); hair.setAttribute('x2', x);
+      hair.style.opacity = 0.6;
+      if (!candle) {
+        dot.setAttribute('cx', x); dot.setAttribute('cy', ys(closeAt(i)));
+        dot.style.opacity = 1;
+      }
+      priceEl.textContent = fmt.money(closeAt(i));
+      lblEl.textContent = `시작 대비 ${pctOf(closeAt(i))}`;
+      dtEl.textContent = dateAt(i);
+      const wrapBox = box.querySelector('.chwrap').getBoundingClientRect();
+      pill.style.left = Math.min(Math.max((x / W) * wrapBox.width, 34), wrapBox.width - 34) + 'px';
+      pill.textContent = dateAt(i);
+      pill.style.opacity = 1;
+    });
+    overlay.addEventListener('pointerleave', () => {
+      hair.style.opacity = 0; dot.style.opacity = 0; pill.style.opacity = 0;
+      priceEl.textContent = fmt.money(C[C.length - 1]);
+      lblEl.textContent = `${baseLabel} ${pctOf(C[C.length - 1])}`;
+      dtEl.textContent = '';
+    });
+  }
+
+  updateBrush();
+  drawMain();
 
   box.querySelectorAll('.ts-tab[data-r]').forEach(btn => btn.addEventListener('click', e => {
     e.stopPropagation();
-    state.range = btn.dataset.r;
-    renderBig(box, ch, state);
+    state.preset = btn.dataset.r;
+    applyPreset();
+    updateBrush();
+    drawMain();
   }));
   box.querySelectorAll('.ts-type .ts-tab').forEach(btn => btn.addEventListener('click', e => {
     e.stopPropagation();
     state.type = btn.dataset.t;
-    renderBig(box, ch, state);
+    box.querySelectorAll('.ts-type .ts-tab').forEach(bn => bn.classList.toggle('on', bn === btn));
+    drawMain();
   }));
   box.querySelector('.chwrap').addEventListener('click', e => e.stopPropagation());
+  brush.addEventListener('click', e => e.stopPropagation());
 
-  const svg = box.querySelector('svg');
-  const hair = svg.querySelector('.ts-hair');
-  const dot = svg.querySelector('.ts-dot');
-  const pill = box.querySelector('.ts-datepill');
-  const priceEl = box.querySelector('.ts-price');
-  const subEl = box.querySelector('.ts-sub');
-  const dtEl = subEl.querySelector('.dt');
-  const overlay = svg.querySelector('rect');
-  const baseLabel = TS_LABELS[state.range];
-
-  overlay.addEventListener('pointermove', e => {
-    const bx = svg.getBoundingClientRect();
-    const px = (e.clientX - bx.left) / bx.width * W;
-    const i = candle
-      ? Math.max(0, Math.min(n - 1, Math.floor((px - ML) / slot)))
-      : Math.max(0, Math.min(n - 1, Math.round((px - ML) / (W - ML - MR) * (n - 1))));
-    const x = xs(i);
-    hair.setAttribute('x1', x); hair.setAttribute('x2', x);
-    hair.style.opacity = 0.6;
-    if (!candle) {
-      dot.setAttribute('cx', x); dot.setAttribute('cy', ys(closeAt(i)));
-      dot.style.opacity = 1;
+  // ── 브러시 드래그: 양 끝 = 기간 조절, 가운데 = 이동, 바깥 클릭 = 그 위치로 점프 ──
+  const MINSPAN = 5;
+  const toX = e => { const r = brush.getBoundingClientRect(); return (e.clientX - r.left) / r.width * W; };
+  const toI = x => Math.max(0, Math.min(nAll - 1, Math.round((x - ML) / PW * (nAll - 1))));
+  let drag = null, raf = false;
+  const schedule = () => { if (!raf) { raf = true; requestAnimationFrame(() => { raf = false; drawMain(); }); } };
+  brush.addEventListener('pointerdown', e => {
+    const x = toX(e);
+    const xl = bxAll(state.i0), xr = bxAll(state.i1);
+    if (Math.abs(x - xl) < 12) drag = { mode: 'l' };
+    else if (Math.abs(x - xr) < 12) drag = { mode: 'r' };
+    else if (x > xl && x < xr) drag = { mode: 'move', off: toI(x) - state.i0 };
+    else {
+      const span = state.i1 - state.i0;
+      const i0 = Math.max(0, Math.min(nAll - 1 - span, toI(x) - Math.round(span / 2)));
+      state.i0 = i0; state.i1 = i0 + span;
+      state.preset = null;
+      drag = { mode: 'move', off: toI(x) - state.i0 };
+      updateBrush(); schedule();
     }
-    priceEl.textContent = fmt.money(closeAt(i));
-    subEl.firstChild.textContent = `${state.range === '전체' ? '시작' : baseLabel.replace(' 전보다', ' 전')} 대비 ${pctOf(closeAt(i))}`;
-    dtEl.textContent = dateAt(i);
-    const wrapBox = box.querySelector('.chwrap').getBoundingClientRect();
-    pill.style.left = Math.min(Math.max((x / W) * wrapBox.width, 34), wrapBox.width - 34) + 'px';
-    pill.textContent = dateAt(i);
-    pill.style.opacity = 1;
+    brush.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
-  overlay.addEventListener('pointerleave', () => {
-    hair.style.opacity = 0; dot.style.opacity = 0; pill.style.opacity = 0;
-    priceEl.textContent = fmt.money(C[C.length - 1]);
-    subEl.firstChild.textContent = `${baseLabel} ${pctOf(C[C.length - 1])}`;
-    dtEl.textContent = '';
+  brush.addEventListener('pointermove', e => {
+    if (!drag) {
+      const x = toX(e);
+      const xl = bxAll(state.i0), xr = bxAll(state.i1);
+      brush.style.cursor = (Math.abs(x - xl) < 12 || Math.abs(x - xr) < 12) ? 'ew-resize'
+        : (x > xl && x < xr ? 'grab' : 'pointer');
+      return;
+    }
+    const i = toI(toX(e));
+    if (drag.mode === 'l') state.i0 = Math.min(i, state.i1 - MINSPAN);
+    else if (drag.mode === 'r') state.i1 = Math.max(i, state.i0 + MINSPAN);
+    else {
+      const span = state.i1 - state.i0;
+      const i0 = Math.max(0, Math.min(nAll - 1 - span, i - drag.off));
+      state.i0 = i0; state.i1 = i0 + span;
+    }
+    state.preset = null;
+    updateBrush();
+    schedule();
   });
+  brush.addEventListener('pointerup', () => { drag = null; });
+  brush.addEventListener('pointercancel', () => { drag = null; });
 }
 
 async function main() {
