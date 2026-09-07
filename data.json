@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-09-04 23:31 UTC",
- "updated_kst": "2026-09-05 08:31 KST",
+ "updated_utc": "2026-09-07 23:51 UTC",
+ "updated_kst": "2026-09-08 08:51 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -88,7 +88,7 @@
    "price": 477.57,
    "avg_dollar_vol_b": 8.61,
    "roll_min_b": 3.9,
-   "interest_ratio": 0.99
+   "interest_ratio": 1.0
   },
   {
    "ticker": "GOOGL",
@@ -96,9 +96,9 @@
    "name_kr": "알파벳 A",
    "sector": "Communication Services",
    "price": 338.46,
-   "avg_dollar_vol_b": 8.12,
-   "roll_min_b": 4.22,
-   "interest_ratio": 0.93
+   "avg_dollar_vol_b": 8.11,
+   "roll_min_b": 4.21,
+   "interest_ratio": 0.94
   },
   {
    "ticker": "PLTR",
@@ -115,7 +115,7 @@
    "name": "Broadcom",
    "name_kr": "브로드컴",
    "sector": "Information Technology",
-   "price": 357.89,
+   "price": 357.9,
    "avg_dollar_vol_b": 7.58,
    "roll_min_b": 3.72,
    "interest_ratio": 1.14
@@ -178,7 +178,7 @@
    "price": 397.14,
    "avg_dollar_vol_b": 3.14,
    "roll_min_b": 1.8,
-   "interest_ratio": 0.51
+   "interest_ratio": 0.52
   },
   {
    "ticker": "MRVL",
@@ -301,16 +301,6 @@
    "interest_ratio": 1.04
   },
   {
-   "ticker": "BAC",
-   "name": "Bank of America",
-   "name_kr": "뱅크오브아메리카",
-   "sector": "Financials",
-   "price": 62.68,
-   "avg_dollar_vol_b": 1.81,
-   "roll_min_b": 1.44,
-   "interest_ratio": 1.0
-  },
-  {
    "ticker": "NOW",
    "name": "ServiceNow",
    "name_kr": "서비스나우",
@@ -318,7 +308,17 @@
    "price": 141.26,
    "avg_dollar_vol_b": 1.81,
    "roll_min_b": 1.18,
-   "interest_ratio": 1.31
+   "interest_ratio": 1.32
+  },
+  {
+   "ticker": "BAC",
+   "name": "Bank of America",
+   "name_kr": "뱅크오브아메리카",
+   "sector": "Financials",
+   "price": 62.68,
+   "avg_dollar_vol_b": 1.8,
+   "roll_min_b": 1.43,
+   "interest_ratio": 1.0
   },
   {
    "ticker": "QCOM",
@@ -408,7 +408,7 @@
    "price": 275.23,
    "avg_dollar_vol_b": 1.55,
    "roll_min_b": 0.98,
-   "interest_ratio": 1.08
+   "interest_ratio": 1.09
   },
   {
    "ticker": "CRWD",
@@ -468,7 +468,7 @@
    "price": 234.89,
    "avg_dollar_vol_b": 1.41,
    "roll_min_b": 0.84,
-   "interest_ratio": 0.8
+   "interest_ratio": 0.81
   },
   {
    "ticker": "DELL",
@@ -568,7 +568,7 @@
    "price": 193.29,
    "avg_dollar_vol_b": 1.27,
    "roll_min_b": 0.97,
-   "interest_ratio": 0.79
+   "interest_ratio": 0.8
   },
   {
    "ticker": "WFC",
@@ -608,7 +608,7 @@
    "price": 88.07,
    "avg_dollar_vol_b": 1.18,
    "roll_min_b": 0.96,
-   "interest_ratio": 1.07
+   "interest_ratio": 1.08
   },
   {
    "ticker": "PFE",
@@ -628,17 +628,7 @@
    "price": 186.72,
    "avg_dollar_vol_b": 1.09,
    "roll_min_b": 0.83,
-   "interest_ratio": 0.83
-  },
-  {
-   "ticker": "PEP",
-   "name": "PepsiCo",
-   "name_kr": "펩시코",
-   "sector": "Consumer Staples",
-   "price": 137.63,
-   "avg_dollar_vol_b": 1.09,
-   "roll_min_b": 0.86,
-   "interest_ratio": 0.83
+   "interest_ratio": 0.84
   },
   {
    "ticker": "TMO",
@@ -659,6 +649,16 @@
    "avg_dollar_vol_b": 1.08,
    "roll_min_b": 0.72,
    "interest_ratio": 1.04
+  },
+  {
+   "ticker": "PEP",
+   "name": "PepsiCo",
+   "name_kr": "펩시코",
+   "sector": "Consumer Staples",
+   "price": 137.63,
+   "avg_dollar_vol_b": 1.08,
+   "roll_min_b": 0.85,
+   "interest_ratio": 0.83
   },
   {
    "ticker": "ADI",
@@ -698,7 +698,7 @@
    "price": 105.31,
    "avg_dollar_vol_b": 1.03,
    "roll_min_b": 0.87,
-   "interest_ratio": 0.8
+   "interest_ratio": 0.81
   },
   {
    "ticker": "T",
@@ -728,7 +728,7 @@
    "price": 477.57,
    "avg_dollar_vol_b": 1.01,
    "roll_min_b": 0.75,
-   "interest_ratio": 0.9
+   "interest_ratio": 0.91
   },
   {
    "ticker": "TMUS",
@@ -778,7 +778,7 @@
    "price": 298.96,
    "avg_dollar_vol_b": 0.93,
    "roll_min_b": 0.71,
-   "interest_ratio": 0.73
+   "interest_ratio": 0.74
   },
   {
    "ticker": "MS",
@@ -857,7 +857,7 @@
    "sector": "Financials",
    "price": 54.96,
    "avg_dollar_vol_b": 0.86,
-   "roll_min_b": 0.67,
+   "roll_min_b": 0.66,
    "interest_ratio": 0.82
   },
   {
@@ -895,7 +895,7 @@
    "name": "Gilead Sciences",
    "name_kr": null,
    "sector": "Health Care",
-   "price": 150.99,
+   "price": 151.0,
    "avg_dollar_vol_b": 0.83,
    "roll_min_b": 0.55,
    "interest_ratio": 0.95
@@ -958,7 +958,7 @@
    "price": 134.26,
    "avg_dollar_vol_b": 0.78,
    "roll_min_b": 0.58,
-   "interest_ratio": 1.1
+   "interest_ratio": 1.11
   },
   {
    "ticker": "SPGI",
