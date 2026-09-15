@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-09-11 23:39 UTC",
- "updated_kst": "2026-09-12 08:39 KST",
+ "updated_utc": "2026-09-15 00:04 UTC",
+ "updated_kst": "2026-09-15 09:04 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -18,7 +18,7 @@
    "price": 218.29,
    "avg_dollar_vol_b": 31.81,
    "roll_min_b": 27.61,
-   "interest_ratio": 0.87
+   "interest_ratio": 0.88
   },
   {
    "ticker": "TSLA",
@@ -338,7 +338,7 @@
    "price": 62.69,
    "avg_dollar_vol_b": 1.8,
    "roll_min_b": 1.43,
-   "interest_ratio": 1.03
+   "interest_ratio": 1.04
   },
   {
    "ticker": "GEV",
@@ -508,7 +508,7 @@
    "price": 308.74,
    "avg_dollar_vol_b": 1.36,
    "roll_min_b": 1.18,
-   "interest_ratio": 0.91
+   "interest_ratio": 0.92
   },
   {
    "ticker": "GE",
@@ -561,16 +561,6 @@
    "interest_ratio": 0.87
   },
   {
-   "ticker": "BKNG",
-   "name": "Booking Holdings",
-   "name_kr": "부킹홀딩스",
-   "sector": "Consumer Discretionary",
-   "price": 173.92,
-   "avg_dollar_vol_b": 1.28,
-   "roll_min_b": 0.97,
-   "interest_ratio": 0.87
-  },
-  {
    "ticker": "INTU",
    "name": "Intuit",
    "name_kr": "인튜이트",
@@ -579,6 +569,16 @@
    "avg_dollar_vol_b": 1.28,
    "roll_min_b": 0.91,
    "interest_ratio": 1.09
+  },
+  {
+   "ticker": "BKNG",
+   "name": "Booking Holdings",
+   "name_kr": "부킹홀딩스",
+   "sector": "Consumer Discretionary",
+   "price": 173.92,
+   "avg_dollar_vol_b": 1.27,
+   "roll_min_b": 0.97,
+   "interest_ratio": 0.87
   },
   {
    "ticker": "WFC",
@@ -848,7 +848,7 @@
    "price": 202.36,
    "avg_dollar_vol_b": 0.87,
    "roll_min_b": 0.72,
-   "interest_ratio": 0.65
+   "interest_ratio": 0.66
   },
   {
    "ticker": "PM",
@@ -858,7 +858,7 @@
    "price": 191.06,
    "avg_dollar_vol_b": 0.87,
    "roll_min_b": 0.6,
-   "interest_ratio": 0.93
+   "interest_ratio": 0.94
   },
   {
    "ticker": "AMGN",
@@ -1088,7 +1088,7 @@
    "price": 515.44,
    "avg_dollar_vol_b": 0.67,
    "roll_min_b": 0.54,
-   "interest_ratio": 0.81
+   "interest_ratio": 0.82
   },
   {
    "ticker": "BMY",
