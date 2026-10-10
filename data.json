@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-10-09 01:33 UTC",
- "updated_kst": "2026-10-09 10:33 KST",
+ "updated_utc": "2026-10-10 01:23 UTC",
+ "updated_kst": "2026-10-10 10:23 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -17,7 +17,7 @@
    "sector": "Information Technology",
    "price": 230.48,
    "avg_dollar_vol_b": 31.47,
-   "roll_min_b": 26.27,
+   "roll_min_b": 26.28,
    "interest_ratio": 0.78
   },
   {
