@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-10-13 02:46 UTC",
- "updated_kst": "2026-10-13 11:46 KST",
+ "updated_utc": "2026-10-14 00:43 UTC",
+ "updated_kst": "2026-10-14 09:43 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -36,7 +36,7 @@
    "name_kr": "마이크론 테크놀로지",
    "sector": "Information Technology",
    "price": 989.04,
-   "avg_dollar_vol_b": 13.32,
+   "avg_dollar_vol_b": 13.33,
    "roll_min_b": 1.98,
    "interest_ratio": 2.0
   },
