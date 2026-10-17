@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-10-15 23:58 UTC",
- "updated_kst": "2026-10-16 08:58 KST",
+ "updated_utc": "2026-10-17 00:01 UTC",
+ "updated_kst": "2026-10-17 09:01 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -68,7 +68,7 @@
    "price": 736.72,
    "avg_dollar_vol_b": 10.17,
    "roll_min_b": 7.19,
-   "interest_ratio": 1.57
+   "interest_ratio": 1.58
   },
   {
    "ticker": "AMZN",
@@ -128,7 +128,7 @@
    "price": 344.91,
    "avg_dollar_vol_b": 5.53,
    "roll_min_b": 3.4,
-   "interest_ratio": 1.05
+   "interest_ratio": 1.06
   },
   {
    "ticker": "INTC",
@@ -146,7 +146,7 @@
    "name_kr": "오라클",
    "sector": "Information Technology",
    "price": 134.47,
-   "avg_dollar_vol_b": 3.85,
+   "avg_dollar_vol_b": 3.86,
    "roll_min_b": 1.32,
    "interest_ratio": 1.11
   },
@@ -328,7 +328,7 @@
    "price": 51.7,
    "avg_dollar_vol_b": 1.86,
    "roll_min_b": 1.47,
-   "interest_ratio": 1.22
+   "interest_ratio": 1.23
   },
   {
    "ticker": "GEV",
@@ -368,7 +368,7 @@
    "price": 891.28,
    "avg_dollar_vol_b": 1.71,
    "roll_min_b": 1.15,
-   "interest_ratio": 1.27
+   "interest_ratio": 1.28
   },
   {
    "ticker": "CSCO",
@@ -541,12 +541,22 @@
    "interest_ratio": 1.03
   },
   {
+   "ticker": "PG",
+   "name": "Procter & Gamble",
+   "name_kr": "프록터앤갬블",
+   "sector": "Consumer Staples",
+   "price": 157.08,
+   "avg_dollar_vol_b": 1.31,
+   "roll_min_b": 1.06,
+   "interest_ratio": 0.96
+  },
+  {
    "ticker": "ABBV",
    "name": "AbbVie",
    "name_kr": "애브비",
    "sector": "Health Care",
    "price": 283.4,
-   "avg_dollar_vol_b": 1.31,
+   "avg_dollar_vol_b": 1.3,
    "roll_min_b": 1.01,
    "interest_ratio": 1.01
   },
@@ -559,16 +569,6 @@
    "avg_dollar_vol_b": 1.3,
    "roll_min_b": 1.06,
    "interest_ratio": 1.04
-  },
-  {
-   "ticker": "PG",
-   "name": "Procter & Gamble",
-   "name_kr": "프록터앤갬블",
-   "sector": "Consumer Staples",
-   "price": 157.08,
-   "avg_dollar_vol_b": 1.3,
-   "roll_min_b": 1.06,
-   "interest_ratio": 0.96
   },
   {
    "ticker": "INTU",
@@ -806,7 +806,7 @@
    "name_kr": "애보트",
    "sector": "Health Care",
    "price": 104.68,
-   "avg_dollar_vol_b": 0.92,
+   "avg_dollar_vol_b": 0.91,
    "roll_min_b": 0.56,
    "interest_ratio": 1.08
   },
@@ -1028,7 +1028,7 @@
    "price": 288.71,
    "avg_dollar_vol_b": 0.75,
    "roll_min_b": 0.58,
-   "interest_ratio": 0.93
+   "interest_ratio": 0.94
   },
   {
    "ticker": "LMT",
@@ -1101,6 +1101,16 @@
    "interest_ratio": 0.67
   },
   {
+   "ticker": "BMY",
+   "name": "Bristol Myers Squibb",
+   "name_kr": null,
+   "sector": "Health Care",
+   "price": 60.57,
+   "avg_dollar_vol_b": 0.67,
+   "roll_min_b": 0.53,
+   "interest_ratio": 1.34
+  },
+  {
    "ticker": "CMG",
    "name": "Chipotle Mexican Grill",
    "name_kr": "치폴레",
@@ -1119,16 +1129,6 @@
    "avg_dollar_vol_b": 0.67,
    "roll_min_b": 0.55,
    "interest_ratio": 0.91
-  },
-  {
-   "ticker": "BMY",
-   "name": "Bristol Myers Squibb",
-   "name_kr": null,
-   "sector": "Health Care",
-   "price": 60.57,
-   "avg_dollar_vol_b": 0.66,
-   "roll_min_b": 0.53,
-   "interest_ratio": 1.34
   },
   {
    "ticker": "BX",
