@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-03 03:08 UTC",
- "updated_kst": "2026-11-03 12:08 KST",
+ "updated_utc": "2026-11-04 01:45 UTC",
+ "updated_kst": "2026-11-04 10:45 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -107,7 +107,7 @@
    "sector": "Information Technology",
    "price": 178.34,
    "avg_dollar_vol_b": 8.0,
-   "roll_min_b": 5.12,
+   "roll_min_b": 5.13,
    "interest_ratio": 0.58
   },
   {
@@ -148,7 +148,7 @@
    "price": 119.22,
    "avg_dollar_vol_b": 3.95,
    "roll_min_b": 1.41,
-   "interest_ratio": 1.11
+   "interest_ratio": 1.12
   },
   {
    "ticker": "NFLX",
