@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-04 01:45 UTC",
- "updated_kst": "2026-11-04 10:45 KST",
+ "updated_utc": "2026-11-05 01:53 UTC",
+ "updated_kst": "2026-11-05 10:53 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -15,68 +15,68 @@
    "name": "Nvidia",
    "name_kr": "엔비디아",
    "sector": "Information Technology",
-   "price": 202.06,
-   "avg_dollar_vol_b": 31.07,
-   "roll_min_b": 25.07,
-   "interest_ratio": 0.72
+   "price": 206.69,
+   "avg_dollar_vol_b": 31.06,
+   "roll_min_b": 24.88,
+   "interest_ratio": 0.7
   },
   {
    "ticker": "TSLA",
    "name": "Tesla, Inc.",
    "name_kr": "테슬라",
    "sector": "Consumer Discretionary",
-   "price": 403.82,
-   "avg_dollar_vol_b": 27.96,
+   "price": 398.5,
+   "avg_dollar_vol_b": 27.93,
    "roll_min_b": 13.01,
-   "interest_ratio": 0.5
+   "interest_ratio": 0.49
   },
   {
    "ticker": "MU",
    "name": "Micron Technology",
    "name_kr": "마이크론 테크놀로지",
    "sector": "Information Technology",
-   "price": 833.59,
-   "avg_dollar_vol_b": 14.0,
+   "price": 855.1,
+   "avg_dollar_vol_b": 14.03,
    "roll_min_b": 1.98,
-   "interest_ratio": 1.77
+   "interest_ratio": 1.76
   },
   {
    "ticker": "AAPL",
    "name": "Apple Inc.",
    "name_kr": "애플",
    "sector": "Information Technology",
-   "price": 338.32,
-   "avg_dollar_vol_b": 12.99,
+   "price": 331.9,
+   "avg_dollar_vol_b": 13.02,
    "roll_min_b": 10.78,
-   "interest_ratio": 1.09
+   "interest_ratio": 1.13
   },
   {
    "ticker": "MSFT",
    "name": "Microsoft",
    "name_kr": "마이크로소프트",
    "sector": "Information Technology",
-   "price": 507.12,
-   "avg_dollar_vol_b": 11.83,
+   "price": 520.99,
+   "avg_dollar_vol_b": 11.84,
    "roll_min_b": 8.91,
-   "interest_ratio": 1.01
+   "interest_ratio": 1.0
   },
   {
    "ticker": "META",
    "name": "Meta Platforms",
    "name_kr": "메타 플랫폼스",
    "sector": "Communication Services",
-   "price": 606.73,
+   "price": 621.03,
    "avg_dollar_vol_b": 10.46,
    "roll_min_b": 8.25,
-   "interest_ratio": 1.48
+   "interest_ratio": 1.47
   },
   {
    "ticker": "AMZN",
    "name": "Amazon",
    "name_kr": "아마존",
    "sector": "Consumer Discretionary",
-   "price": 245.63,
-   "avg_dollar_vol_b": 10.18,
+   "price": 250.69,
+   "avg_dollar_vol_b": 10.19,
    "roll_min_b": 7.95,
    "interest_ratio": 1.05
   },
@@ -85,48 +85,48 @@
    "name": "Advanced Micro Devices",
    "name_kr": "AMD",
    "sector": "Information Technology",
-   "price": 466.84,
-   "avg_dollar_vol_b": 9.17,
+   "price": 483.9,
+   "avg_dollar_vol_b": 9.18,
    "roll_min_b": 3.9,
-   "interest_ratio": 1.28
+   "interest_ratio": 1.33
   },
   {
    "ticker": "GOOGL",
    "name": "Alphabet Inc. (Class A)",
    "name_kr": "알파벳 A",
    "sector": "Communication Services",
-   "price": 278.99,
+   "price": 280.03,
    "avg_dollar_vol_b": 8.62,
    "roll_min_b": 5.11,
-   "interest_ratio": 1.24
+   "interest_ratio": 1.25
   },
   {
    "ticker": "PLTR",
    "name": "Palantir Technologies",
    "name_kr": "팔란티어 테크놀로지스",
    "sector": "Information Technology",
-   "price": 178.34,
-   "avg_dollar_vol_b": 8.0,
-   "roll_min_b": 5.13,
-   "interest_ratio": 0.58
+   "price": 175.4,
+   "avg_dollar_vol_b": 8.01,
+   "roll_min_b": 5.11,
+   "interest_ratio": 0.62
   },
   {
    "ticker": "AVGO",
    "name": "Broadcom",
    "name_kr": "브로드컴",
    "sector": "Information Technology",
-   "price": 322.23,
+   "price": 332.13,
    "avg_dollar_vol_b": 7.87,
    "roll_min_b": 5.07,
-   "interest_ratio": 0.97
+   "interest_ratio": 0.96
   },
   {
    "ticker": "INTC",
    "name": "Intel",
    "name_kr": "인텔",
    "sector": "Information Technology",
-   "price": 59.97,
-   "avg_dollar_vol_b": 5.69,
+   "price": 60.55,
+   "avg_dollar_vol_b": 5.7,
    "roll_min_b": 1.54,
    "interest_ratio": 1.89
   },
@@ -135,27 +135,27 @@
    "name": "Alphabet Inc. (Class C)",
    "name_kr": "알파벳 C",
    "sector": "Communication Services",
-   "price": 278.04,
+   "price": 278.27,
    "avg_dollar_vol_b": 5.68,
    "roll_min_b": 3.42,
-   "interest_ratio": 1.21
+   "interest_ratio": 1.23
   },
   {
    "ticker": "ORCL",
    "name": "Oracle Corporation",
    "name_kr": "오라클",
    "sector": "Information Technology",
-   "price": 119.22,
-   "avg_dollar_vol_b": 3.95,
+   "price": 126.19,
+   "avg_dollar_vol_b": 3.97,
    "roll_min_b": 1.41,
-   "interest_ratio": 1.12
+   "interest_ratio": 1.21
   },
   {
    "ticker": "NFLX",
    "name": "Netflix",
    "name_kr": "넷플릭스",
    "sector": "Communication Services",
-   "price": 62.34,
+   "price": 63.42,
    "avg_dollar_vol_b": 3.84,
    "roll_min_b": 2.5,
    "interest_ratio": 0.78
@@ -165,47 +165,47 @@
    "name": "Lilly (Eli)",
    "name_kr": "일라이 릴리",
    "sector": "Health Care",
-   "price": 1410.99,
+   "price": 1409.38,
    "avg_dollar_vol_b": 3.22,
    "roll_min_b": 2.79,
-   "interest_ratio": 1.02
+   "interest_ratio": 1.05
   },
   {
    "ticker": "MRVL",
    "name": "Marvell Technology",
    "name_kr": "마벨 테크놀로지",
    "sector": "Information Technology",
-   "price": 171.41,
-   "avg_dollar_vol_b": 3.17,
+   "price": 171.97,
+   "avg_dollar_vol_b": 3.18,
    "roll_min_b": 1.15,
-   "interest_ratio": 1.86
+   "interest_ratio": 1.9
   },
   {
    "ticker": "UNH",
    "name": "UnitedHealth Group",
    "name_kr": "유나이티드헬스 그룹",
    "sector": "Health Care",
-   "price": 400.44,
+   "price": 404.44,
    "avg_dollar_vol_b": 3.15,
    "roll_min_b": 1.95,
-   "interest_ratio": 0.76
+   "interest_ratio": 0.75
   },
   {
    "ticker": "HOOD",
    "name": "Robinhood Markets",
    "name_kr": null,
    "sector": "Financials",
-   "price": 83.84,
+   "price": 85.68,
    "avg_dollar_vol_b": 2.7,
-   "roll_min_b": 0.91,
-   "interest_ratio": 0.72
+   "roll_min_b": 0.92,
+   "interest_ratio": 0.7
   },
   {
    "ticker": "COIN",
    "name": "Coinbase",
    "name_kr": "코인베이스",
    "sector": "Financials",
-   "price": 137.83,
+   "price": 145.45,
    "avg_dollar_vol_b": 2.64,
    "roll_min_b": 1.28,
    "interest_ratio": 0.53
@@ -215,47 +215,47 @@
    "name": "JPMorgan Chase",
    "name_kr": "JP모건 체이스",
    "sector": "Financials",
-   "price": 340.58,
+   "price": 337.98,
    "avg_dollar_vol_b": 2.62,
    "roll_min_b": 2.14,
-   "interest_ratio": 0.88
+   "interest_ratio": 0.89
   },
   {
    "ticker": "APP",
    "name": "AppLovin",
    "name_kr": "앱러빈",
    "sector": "Communication Services",
-   "price": 228.85,
+   "price": 245.51,
    "avg_dollar_vol_b": 2.56,
-   "roll_min_b": 1.57,
-   "interest_ratio": 0.4
+   "roll_min_b": 1.51,
+   "interest_ratio": 0.39
   },
   {
    "ticker": "BRK-B",
    "name": "Berkshire Hathaway",
    "name_kr": "버크셔 해서웨이 B",
    "sector": "Financials",
-   "price": 556.11,
+   "price": 557.07,
    "avg_dollar_vol_b": 2.31,
    "roll_min_b": 1.81,
-   "interest_ratio": 1.0
+   "interest_ratio": 1.03
   },
   {
    "ticker": "V",
    "name": "Visa Inc.",
    "name_kr": "비자",
    "sector": "Financials",
-   "price": 425.51,
+   "price": 420.42,
    "avg_dollar_vol_b": 2.31,
    "roll_min_b": 1.88,
-   "interest_ratio": 1.1
+   "interest_ratio": 1.11
   },
   {
    "ticker": "CRM",
    "name": "Salesforce",
    "name_kr": "세일즈포스",
    "sector": "Information Technology",
-   "price": 226.18,
+   "price": 222.2,
    "avg_dollar_vol_b": 2.29,
    "roll_min_b": 1.87,
    "interest_ratio": 0.74
@@ -265,27 +265,27 @@
    "name": "Applied Materials",
    "name_kr": "어플라이드 머티어리얼즈",
    "sector": "Information Technology",
-   "price": 374.53,
+   "price": 381.92,
    "avg_dollar_vol_b": 2.27,
    "roll_min_b": 1.09,
-   "interest_ratio": 1.37
+   "interest_ratio": 1.36
   },
   {
    "ticker": "WMT",
    "name": "Walmart",
    "name_kr": "월마트",
    "sector": "Consumer Staples",
-   "price": 127.69,
-   "avg_dollar_vol_b": 2.25,
-   "roll_min_b": 1.48,
-   "interest_ratio": 1.05
+   "price": 124.86,
+   "avg_dollar_vol_b": 2.26,
+   "roll_min_b": 1.49,
+   "interest_ratio": 1.07
   },
   {
    "ticker": "COST",
    "name": "Costco",
    "name_kr": "코스트코",
    "sector": "Consumer Staples",
-   "price": 1040.55,
+   "price": 1019.26,
    "avg_dollar_vol_b": 2.14,
    "roll_min_b": 1.81,
    "interest_ratio": 1.01
@@ -295,7 +295,7 @@
    "name": "ExxonMobil",
    "name_kr": "엑슨모빌",
    "sector": "Energy",
-   "price": 179.67,
+   "price": 177.46,
    "avg_dollar_vol_b": 2.11,
    "roll_min_b": 1.59,
    "interest_ratio": 1.02
@@ -305,18 +305,18 @@
    "name": "GE Vernova",
    "name_kr": "GE 버노바",
    "sector": "Industrials",
-   "price": 862.25,
-   "avg_dollar_vol_b": 1.92,
+   "price": 918.2,
+   "avg_dollar_vol_b": 1.93,
    "roll_min_b": 1.15,
-   "interest_ratio": 1.43
+   "interest_ratio": 1.46
   },
   {
    "ticker": "LRCX",
    "name": "Lam Research",
    "name_kr": "램리서치",
    "sector": "Information Technology",
-   "price": 227.56,
-   "avg_dollar_vol_b": 1.92,
+   "price": 230.72,
+   "avg_dollar_vol_b": 1.93,
    "roll_min_b": 0.87,
    "interest_ratio": 1.49
   },
@@ -325,158 +325,158 @@
    "name": "Qualcomm",
    "name_kr": "퀄컴",
    "sector": "Information Technology",
-   "price": 162.08,
+   "price": 164.43,
    "avg_dollar_vol_b": 1.89,
    "roll_min_b": 1.18,
-   "interest_ratio": 0.98
+   "interest_ratio": 0.97
   },
   {
    "ticker": "BAC",
    "name": "Bank of America",
    "name_kr": "뱅크오브아메리카",
    "sector": "Financials",
-   "price": 49.57,
+   "price": 49.66,
    "avg_dollar_vol_b": 1.87,
    "roll_min_b": 1.47,
-   "interest_ratio": 1.15
+   "interest_ratio": 1.16
   },
   {
    "ticker": "NOW",
    "name": "ServiceNow",
    "name_kr": "서비스나우",
    "sector": "Information Technology",
-   "price": 106.01,
+   "price": 109.16,
    "avg_dollar_vol_b": 1.87,
    "roll_min_b": 1.25,
-   "interest_ratio": 1.24
+   "interest_ratio": 1.25
   },
   {
    "ticker": "SMCI",
    "name": "Supermicro",
    "name_kr": "슈퍼마이크로",
    "sector": "Information Technology",
-   "price": 30.44,
+   "price": 31.39,
    "avg_dollar_vol_b": 1.81,
    "roll_min_b": 0.89,
-   "interest_ratio": 0.71
+   "interest_ratio": 0.73
   },
   {
    "ticker": "GS",
    "name": "Goldman Sachs",
    "name_kr": "골드만삭스",
    "sector": "Financials",
-   "price": 898.72,
+   "price": 896.09,
    "avg_dollar_vol_b": 1.73,
    "roll_min_b": 1.28,
-   "interest_ratio": 1.17
+   "interest_ratio": 1.16
   },
   {
    "ticker": "CSCO",
    "name": "Cisco",
    "name_kr": "시스코",
    "sector": "Information Technology",
-   "price": 101.61,
-   "avg_dollar_vol_b": 1.68,
+   "price": 102.97,
+   "avg_dollar_vol_b": 1.69,
    "roll_min_b": 1.11,
-   "interest_ratio": 1.07
-  },
-  {
-   "ticker": "BA",
-   "name": "Boeing",
-   "name_kr": "보잉",
-   "sector": "Industrials",
-   "price": 175.4,
-   "avg_dollar_vol_b": 1.65,
-   "roll_min_b": 1.19,
-   "interest_ratio": 1.07
+   "interest_ratio": 1.06
   },
   {
    "ticker": "MA",
    "name": "Mastercard",
    "name_kr": "마스터카드",
    "sector": "Financials",
-   "price": 658.1,
-   "avg_dollar_vol_b": 1.65,
+   "price": 647.18,
+   "avg_dollar_vol_b": 1.66,
    "roll_min_b": 1.36,
-   "interest_ratio": 1.2
+   "interest_ratio": 1.22
   },
   {
    "ticker": "CRWD",
    "name": "CrowdStrike",
    "name_kr": "크라우드스트라이크",
    "sector": "Information Technology",
-   "price": 241.81,
-   "avg_dollar_vol_b": 1.63,
+   "price": 244.68,
+   "avg_dollar_vol_b": 1.64,
    "roll_min_b": 1.16,
-   "interest_ratio": 1.39
+   "interest_ratio": 1.4
+  },
+  {
+   "ticker": "BA",
+   "name": "Boeing",
+   "name_kr": "보잉",
+   "sector": "Industrials",
+   "price": 173.31,
+   "avg_dollar_vol_b": 1.63,
+   "roll_min_b": 1.19,
+   "interest_ratio": 1.08
   },
   {
    "ticker": "JNJ",
    "name": "Johnson & Johnson",
    "name_kr": "존슨앤드존슨",
    "sector": "Health Care",
-   "price": 270.56,
-   "avg_dollar_vol_b": 1.62,
+   "price": 266.17,
+   "avg_dollar_vol_b": 1.63,
    "roll_min_b": 1.19,
-   "interest_ratio": 1.23
+   "interest_ratio": 1.2
   },
   {
    "ticker": "DELL",
    "name": "Dell Technologies",
    "name_kr": "델 테크놀로지스",
    "sector": "Information Technology",
-   "price": 392.78,
+   "price": 408.4,
    "avg_dollar_vol_b": 1.6,
    "roll_min_b": 0.63,
-   "interest_ratio": 2.02
+   "interest_ratio": 2.0
   },
   {
    "ticker": "CAT",
    "name": "Caterpillar Inc.",
    "name_kr": "캐터필러",
    "sector": "Industrials",
-   "price": 613.62,
+   "price": 623.94,
    "avg_dollar_vol_b": 1.59,
    "roll_min_b": 0.78,
-   "interest_ratio": 1.46
+   "interest_ratio": 1.47
   },
   {
    "ticker": "UBER",
    "name": "Uber",
    "name_kr": "우버",
    "sector": "Industrials",
-   "price": 66.71,
+   "price": 66.6,
    "avg_dollar_vol_b": 1.58,
    "roll_min_b": 1.26,
    "interest_ratio": 0.71
-  },
-  {
-   "ticker": "CVX",
-   "name": "Chevron Corporation",
-   "name_kr": "셰브론",
-   "sector": "Energy",
-   "price": 227.77,
-   "avg_dollar_vol_b": 1.54,
-   "roll_min_b": 1.1,
-   "interest_ratio": 1.1
   },
   {
    "ticker": "TXN",
    "name": "Texas Instruments",
    "name_kr": "텍사스 인스트루먼트",
    "sector": "Information Technology",
-   "price": 302.02,
-   "avg_dollar_vol_b": 1.54,
+   "price": 312.49,
+   "avg_dollar_vol_b": 1.55,
    "roll_min_b": 1.08,
-   "interest_ratio": 1.38
+   "interest_ratio": 1.44
+  },
+  {
+   "ticker": "CVX",
+   "name": "Chevron Corporation",
+   "name_kr": "셰브론",
+   "sector": "Energy",
+   "price": 225.27,
+   "avg_dollar_vol_b": 1.54,
+   "roll_min_b": 1.1,
+   "interest_ratio": 1.11
   },
   {
    "ticker": "PANW",
    "name": "Palo Alto Networks",
    "name_kr": "팔로알토 네트웍스",
    "sector": "Information Technology",
-   "price": 351.72,
-   "avg_dollar_vol_b": 1.49,
+   "price": 350.2,
+   "avg_dollar_vol_b": 1.5,
    "roll_min_b": 0.91,
    "interest_ratio": 1.39
   },
@@ -485,7 +485,7 @@
    "name": "Adobe Inc.",
    "name_kr": "어도비",
    "sector": "Information Technology",
-   "price": 251.47,
+   "price": 246.14,
    "avg_dollar_vol_b": 1.48,
    "roll_min_b": 1.2,
    "interest_ratio": 0.71
@@ -495,27 +495,27 @@
    "name": "IBM",
    "name_kr": "IBM",
    "sector": "Information Technology",
-   "price": 252.51,
+   "price": 250.04,
    "avg_dollar_vol_b": 1.45,
-   "roll_min_b": 0.89,
-   "interest_ratio": 0.91
+   "roll_min_b": 0.9,
+   "interest_ratio": 0.9
   },
   {
    "ticker": "GE",
    "name": "GE Aerospace",
    "name_kr": "GE 에어로스페이스",
    "sector": "Industrials",
-   "price": 315.78,
+   "price": 320.67,
    "avg_dollar_vol_b": 1.39,
    "roll_min_b": 0.93,
-   "interest_ratio": 1.14
+   "interest_ratio": 1.15
   },
   {
    "ticker": "HD",
    "name": "Home Depot (The)",
    "name_kr": "홈디포",
    "sector": "Consumer Discretionary",
-   "price": 341.15,
+   "price": 333.66,
    "avg_dollar_vol_b": 1.39,
    "roll_min_b": 1.18,
    "interest_ratio": 1.04
@@ -525,17 +525,17 @@
    "name": "KLA Corporation",
    "name_kr": "KLA",
    "sector": "Information Technology",
-   "price": 153.11,
+   "price": 156.2,
    "avg_dollar_vol_b": 1.39,
    "roll_min_b": 0.75,
-   "interest_ratio": 1.44
+   "interest_ratio": 1.45
   },
   {
    "ticker": "C",
    "name": "Citigroup",
    "name_kr": "씨티그룹",
    "sector": "Financials",
-   "price": 123.1,
+   "price": 122.71,
    "avg_dollar_vol_b": 1.32,
    "roll_min_b": 0.97,
    "interest_ratio": 0.88
@@ -545,37 +545,37 @@
    "name": "AbbVie",
    "name_kr": "애브비",
    "sector": "Health Care",
-   "price": 288.84,
+   "price": 286.0,
    "avg_dollar_vol_b": 1.31,
    "roll_min_b": 1.01,
-   "interest_ratio": 1.17
+   "interest_ratio": 1.15
   },
   {
    "ticker": "BKNG",
    "name": "Booking Holdings",
    "name_kr": "부킹홀딩스",
    "sector": "Consumer Discretionary",
-   "price": 153.75,
+   "price": 155.67,
    "avg_dollar_vol_b": 1.31,
    "roll_min_b": 1.06,
-   "interest_ratio": 0.83
+   "interest_ratio": 0.85
   },
   {
    "ticker": "PG",
    "name": "Procter & Gamble",
    "name_kr": "프록터앤갬블",
    "sector": "Consumer Staples",
-   "price": 163.56,
+   "price": 162.06,
    "avg_dollar_vol_b": 1.31,
    "roll_min_b": 1.05,
-   "interest_ratio": 1.21
+   "interest_ratio": 1.24
   },
   {
    "ticker": "INTU",
    "name": "Intuit",
    "name_kr": "인튜이트",
    "sector": "Information Technology",
-   "price": 352.1,
+   "price": 344.72,
    "avg_dollar_vol_b": 1.3,
    "roll_min_b": 1.05,
    "interest_ratio": 0.8
@@ -585,27 +585,27 @@
    "name": "Vertiv",
    "name_kr": "버티브",
    "sector": "Industrials",
-   "price": 224.24,
+   "price": 235.97,
    "avg_dollar_vol_b": 1.29,
    "roll_min_b": 0.77,
-   "interest_ratio": 1.23
+   "interest_ratio": 1.24
   },
   {
    "ticker": "WFC",
    "name": "Wells Fargo",
    "name_kr": "웰스파고",
    "sector": "Financials",
-   "price": 85.89,
+   "price": 85.53,
    "avg_dollar_vol_b": 1.27,
    "roll_min_b": 1.11,
-   "interest_ratio": 1.03
+   "interest_ratio": 1.05
   },
   {
    "ticker": "MRK",
    "name": "Merck & Co.",
    "name_kr": "머크",
    "sector": "Health Care",
-   "price": 148.36,
+   "price": 144.67,
    "avg_dollar_vol_b": 1.26,
    "roll_min_b": 0.95,
    "interest_ratio": 1.18
@@ -615,27 +615,27 @@
    "name": "Coca-Cola Company (The)",
    "name_kr": "코카콜라",
    "sector": "Consumer Staples",
-   "price": 95.83,
+   "price": 94.8,
    "avg_dollar_vol_b": 1.21,
    "roll_min_b": 1.01,
-   "interest_ratio": 1.28
+   "interest_ratio": 1.27
   },
   {
    "ticker": "TMO",
    "name": "Thermo Fisher Scientific",
    "name_kr": "서모피셔 사이언티픽",
    "sector": "Health Care",
-   "price": 682.65,
+   "price": 698.34,
    "avg_dollar_vol_b": 1.15,
    "roll_min_b": 0.97,
-   "interest_ratio": 1.39
+   "interest_ratio": 1.38
   },
   {
    "ticker": "ACN",
    "name": "Accenture",
    "name_kr": "액센츄어",
    "sector": "Information Technology",
-   "price": 260.94,
+   "price": 254.56,
    "avg_dollar_vol_b": 1.14,
    "roll_min_b": 0.89,
    "interest_ratio": 1.37
@@ -645,18 +645,18 @@
    "name": "Arista Networks",
    "name_kr": "아리스타 네트웍스",
    "sector": "Information Technology",
-   "price": 164.14,
+   "price": 169.91,
    "avg_dollar_vol_b": 1.12,
    "roll_min_b": 0.89,
-   "interest_ratio": 1.02
+   "interest_ratio": 1.08
   },
   {
    "ticker": "PEP",
    "name": "PepsiCo",
    "name_kr": "펩시코",
    "sector": "Consumer Staples",
-   "price": 140.42,
-   "avg_dollar_vol_b": 1.11,
+   "price": 137.27,
+   "avg_dollar_vol_b": 1.12,
    "roll_min_b": 0.91,
    "interest_ratio": 1.23
   },
@@ -665,49 +665,49 @@
    "name": "Pfizer",
    "name_kr": "화이자",
    "sector": "Health Care",
-   "price": 30.67,
+   "price": 30.0,
    "avg_dollar_vol_b": 1.11,
    "roll_min_b": 0.9,
-   "interest_ratio": 0.81
+   "interest_ratio": 0.85
   },
   {
    "ticker": "ADI",
    "name": "Analog Devices",
    "name_kr": "아날로그 디바이시스",
    "sector": "Information Technology",
-   "price": 412.85,
+   "price": 419.79,
    "avg_dollar_vol_b": 1.1,
-   "roll_min_b": 0.67,
-   "interest_ratio": 1.39
+   "roll_min_b": 0.68,
+   "interest_ratio": 1.43
   },
   {
    "ticker": "MCD",
    "name": "McDonald's",
    "name_kr": "맥도날드",
    "sector": "Consumer Discretionary",
-   "price": 265.64,
+   "price": 263.04,
    "avg_dollar_vol_b": 1.07,
    "roll_min_b": 0.83,
-   "interest_ratio": 1.25
+   "interest_ratio": 1.27
   },
   {
    "ticker": "NKE",
    "name": "Nike, Inc.",
    "name_kr": "나이키",
    "sector": "Consumer Discretionary",
-   "price": 39.12,
+   "price": 38.48,
    "avg_dollar_vol_b": 1.06,
-   "roll_min_b": 0.86,
-   "interest_ratio": 1.02
+   "roll_min_b": 0.87,
+   "interest_ratio": 0.94
   },
   {
    "ticker": "T",
    "name": "AT&T",
    "name_kr": "AT&T",
    "sector": "Communication Services",
-   "price": 21.44,
+   "price": 21.39,
    "avg_dollar_vol_b": 1.04,
-   "roll_min_b": 0.75,
+   "roll_min_b": 0.76,
    "interest_ratio": 1.21
   },
   {
@@ -715,37 +715,37 @@
    "name": "Walt Disney Company (The)",
    "name_kr": "월트디즈니",
    "sector": "Communication Services",
-   "price": 113.11,
+   "price": 114.18,
    "avg_dollar_vol_b": 1.04,
    "roll_min_b": 0.87,
-   "interest_ratio": 0.82
+   "interest_ratio": 0.84
   },
   {
    "ticker": "CVNA",
    "name": "Carvana",
    "name_kr": "카바나",
    "sector": "Consumer Discretionary",
-   "price": 72.0,
+   "price": 71.28,
    "avg_dollar_vol_b": 1.03,
    "roll_min_b": 0.55,
-   "interest_ratio": 0.61
+   "interest_ratio": 0.62
   },
   {
    "ticker": "LIN",
    "name": "Linde plc",
    "name_kr": "린데",
    "sector": "Materials",
-   "price": 519.72,
+   "price": 511.55,
    "avg_dollar_vol_b": 1.03,
    "roll_min_b": 0.75,
-   "interest_ratio": 1.02
+   "interest_ratio": 1.01
   },
   {
    "ticker": "RDDT",
    "name": "Reddit",
    "name_kr": null,
    "sector": "Communication Services",
-   "price": 90.97,
+   "price": 96.15,
    "avg_dollar_vol_b": 1.03,
    "roll_min_b": 0.71,
    "interest_ratio": 0.84
@@ -755,157 +755,157 @@
    "name": "Intuitive Surgical",
    "name_kr": "인튜이티브 서지컬",
    "sector": "Health Care",
-   "price": 436.87,
+   "price": 440.75,
    "avg_dollar_vol_b": 1.02,
    "roll_min_b": 0.84,
-   "interest_ratio": 1.04
+   "interest_ratio": 1.05
   },
   {
    "ticker": "TMUS",
    "name": "T-Mobile US",
    "name_kr": "T모바일 US",
    "sector": "Communication Services",
-   "price": 160.15,
+   "price": 154.41,
    "avg_dollar_vol_b": 1.02,
    "roll_min_b": 0.81,
-   "interest_ratio": 1.08
+   "interest_ratio": 1.09
   },
   {
    "ticker": "VZ",
    "name": "Verizon",
    "name_kr": "버라이즌",
    "sector": "Communication Services",
-   "price": 45.05,
+   "price": 45.24,
    "avg_dollar_vol_b": 1.0,
    "roll_min_b": 0.68,
-   "interest_ratio": 1.34
+   "interest_ratio": 1.35
   },
   {
    "ticker": "MS",
    "name": "Morgan Stanley",
    "name_kr": "모건스탠리",
    "sector": "Financials",
-   "price": 185.73,
+   "price": 186.09,
    "avg_dollar_vol_b": 0.97,
    "roll_min_b": 0.7,
-   "interest_ratio": 1.19
+   "interest_ratio": 1.2
   },
   {
    "ticker": "CEG",
    "name": "Constellation Energy",
    "name_kr": "컨스텔레이션 에너지",
    "sector": "Utilities",
-   "price": 257.25,
+   "price": 263.4,
    "avg_dollar_vol_b": 0.94,
    "roll_min_b": 0.73,
-   "interest_ratio": 1.21
+   "interest_ratio": 1.2
   },
   {
    "ticker": "ETN",
    "name": "Eaton Corporation",
    "name_kr": "이튼",
    "sector": "Industrials",
-   "price": 366.07,
+   "price": 391.7,
    "avg_dollar_vol_b": 0.93,
    "roll_min_b": 0.72,
-   "interest_ratio": 1.09
+   "interest_ratio": 1.13
   },
   {
    "ticker": "ABT",
    "name": "Abbott Laboratories",
    "name_kr": "애보트",
    "sector": "Health Care",
-   "price": 110.16,
+   "price": 109.4,
    "avg_dollar_vol_b": 0.92,
-   "roll_min_b": 0.64,
-   "interest_ratio": 1.1
+   "roll_min_b": 0.65,
+   "interest_ratio": 1.08
   },
   {
    "ticker": "AXP",
    "name": "American Express",
    "name_kr": "아메리칸 익스프레스",
    "sector": "Financials",
-   "price": 327.98,
+   "price": 325.5,
    "avg_dollar_vol_b": 0.92,
    "roll_min_b": 0.72,
-   "interest_ratio": 1.05
+   "interest_ratio": 1.04
   },
   {
    "ticker": "AMGN",
    "name": "Amgen",
    "name_kr": "암젠",
    "sector": "Health Care",
-   "price": 465.45,
+   "price": 461.26,
    "avg_dollar_vol_b": 0.91,
    "roll_min_b": 0.61,
-   "interest_ratio": 1.26
-  },
-  {
-   "ticker": "VST",
-   "name": "Vistra Corp.",
-   "name_kr": "비스트라",
-   "sector": "Utilities",
-   "price": 134.61,
-   "avg_dollar_vol_b": 0.89,
-   "roll_min_b": 0.64,
-   "interest_ratio": 1.24
+   "interest_ratio": 1.25
   },
   {
    "ticker": "PM",
    "name": "Philip Morris International",
    "name_kr": "필립모리스",
    "sector": "Consumer Staples",
-   "price": 208.29,
-   "avg_dollar_vol_b": 0.88,
+   "price": 208.03,
+   "avg_dollar_vol_b": 0.89,
    "roll_min_b": 0.6,
-   "interest_ratio": 1.06
+   "interest_ratio": 1.04
+  },
+  {
+   "ticker": "VST",
+   "name": "Vistra Corp.",
+   "name_kr": "비스트라",
+   "sector": "Utilities",
+   "price": 139.59,
+   "avg_dollar_vol_b": 0.89,
+   "roll_min_b": 0.64,
+   "interest_ratio": 1.19
   },
   {
    "ticker": "SNPS",
    "name": "Synopsys",
    "name_kr": null,
    "sector": "Information Technology",
-   "price": 466.08,
+   "price": 462.88,
    "avg_dollar_vol_b": 0.88,
    "roll_min_b": 0.56,
-   "interest_ratio": 1.24
+   "interest_ratio": 1.2
   },
   {
    "ticker": "HON",
    "name": "Honeywell Technologies",
    "name_kr": "하니웰",
    "sector": "Industrials",
-   "price": 223.77,
+   "price": 224.05,
    "avg_dollar_vol_b": 0.87,
    "roll_min_b": 0.62,
-   "interest_ratio": 0.65
+   "interest_ratio": 0.67
   },
   {
    "ticker": "SCHW",
    "name": "Charles Schwab Corporation",
    "name_kr": "찰스슈왑",
    "sector": "Financials",
-   "price": 88.71,
+   "price": 89.28,
    "avg_dollar_vol_b": 0.86,
    "roll_min_b": 0.62,
-   "interest_ratio": 0.92
+   "interest_ratio": 0.94
   },
   {
    "ticker": "GILD",
    "name": "Gilead Sciences",
    "name_kr": null,
    "sector": "Health Care",
-   "price": 170.33,
+   "price": 167.47,
    "avg_dollar_vol_b": 0.86,
    "roll_min_b": 0.61,
-   "interest_ratio": 1.16
+   "interest_ratio": 1.17
   },
   {
    "ticker": "DHR",
    "name": "Danaher Corporation",
    "name_kr": "다나허",
    "sector": "Health Care",
-   "price": 227.97,
+   "price": 230.11,
    "avg_dollar_vol_b": 0.85,
    "roll_min_b": 0.74,
    "interest_ratio": 1.18
@@ -915,7 +915,7 @@
    "name": "NextEra Energy",
    "name_kr": "넥스트에라 에너지",
    "sector": "Utilities",
-   "price": 85.03,
+   "price": 84.33,
    "avg_dollar_vol_b": 0.85,
    "roll_min_b": 0.69,
    "interest_ratio": 1.12
@@ -925,7 +925,7 @@
    "name": "PayPal",
    "name_kr": "페이팔",
    "sector": "Financials",
-   "price": 58.78,
+   "price": 58.21,
    "avg_dollar_vol_b": 0.85,
    "roll_min_b": 0.66,
    "interest_ratio": 0.77
@@ -935,77 +935,77 @@
    "name": "RTX Corporation",
    "name_kr": "RTX",
    "sector": "Industrials",
-   "price": 202.79,
+   "price": 203.82,
    "avg_dollar_vol_b": 0.84,
    "roll_min_b": 0.53,
-   "interest_ratio": 1.28
+   "interest_ratio": 1.29
   },
   {
    "ticker": "SBUX",
    "name": "Starbucks",
    "name_kr": "스타벅스",
    "sector": "Consumer Discretionary",
-   "price": 104.4,
+   "price": 104.77,
    "avg_dollar_vol_b": 0.84,
    "roll_min_b": 0.7,
-   "interest_ratio": 1.17
+   "interest_ratio": 1.16
   },
   {
    "ticker": "COF",
    "name": "Capital One",
    "name_kr": null,
    "sector": "Financials",
-   "price": 210.77,
+   "price": 208.71,
    "avg_dollar_vol_b": 0.83,
    "roll_min_b": 0.54,
-   "interest_ratio": 0.97
+   "interest_ratio": 0.98
   },
   {
    "ticker": "CMCSA",
    "name": "Comcast",
    "name_kr": "컴캐스트",
    "sector": "Communication Services",
-   "price": 23.87,
+   "price": 23.67,
    "avg_dollar_vol_b": 0.82,
    "roll_min_b": 0.65,
-   "interest_ratio": 0.88
-  },
-  {
-   "ticker": "F",
-   "name": "Ford Motor Company",
-   "name_kr": null,
-   "sector": "Consumer Discretionary",
-   "price": 12.6,
-   "avg_dollar_vol_b": 0.82,
-   "roll_min_b": 0.56,
-   "interest_ratio": 0.61
+   "interest_ratio": 0.89
   },
   {
    "ticker": "DDOG",
    "name": "Datadog",
    "name_kr": null,
    "sector": "Information Technology",
-   "price": 216.1,
-   "avg_dollar_vol_b": 0.81,
+   "price": 220.52,
+   "avg_dollar_vol_b": 0.82,
    "roll_min_b": 0.5,
-   "interest_ratio": 0.97
+   "interest_ratio": 1.02
+  },
+  {
+   "ticker": "F",
+   "name": "Ford Motor Company",
+   "name_kr": null,
+   "sector": "Consumer Discretionary",
+   "price": 12.31,
+   "avg_dollar_vol_b": 0.82,
+   "roll_min_b": 0.56,
+   "interest_ratio": 0.62
   },
   {
    "ticker": "COP",
    "name": "ConocoPhillips",
    "name_kr": "코노코필립스",
    "sector": "Energy",
-   "price": 146.84,
-   "avg_dollar_vol_b": 0.79,
+   "price": 144.4,
+   "avg_dollar_vol_b": 0.8,
    "roll_min_b": 0.58,
-   "interest_ratio": 1.08
+   "interest_ratio": 1.11
   },
   {
    "ticker": "SPGI",
    "name": "S&P Global",
    "name_kr": "S&P 글로벌",
    "sector": "Financials",
-   "price": 475.17,
+   "price": 466.03,
    "avg_dollar_vol_b": 0.79,
    "roll_min_b": 0.56,
    "interest_ratio": 1.01
@@ -1015,87 +1015,87 @@
    "name": "Medtronic",
    "name_kr": null,
    "sector": "Health Care",
-   "price": 99.29,
+   "price": 98.88,
    "avg_dollar_vol_b": 0.78,
    "roll_min_b": 0.54,
-   "interest_ratio": 3.36
+   "interest_ratio": 3.17
   },
   {
    "ticker": "TJX",
    "name": "TJX Companies",
    "name_kr": "TJX",
    "sector": "Consumer Discretionary",
-   "price": 141.0,
+   "price": 137.63,
    "avg_dollar_vol_b": 0.77,
    "roll_min_b": 0.56,
-   "interest_ratio": 1.17
+   "interest_ratio": 1.15
   },
   {
    "ticker": "UNP",
    "name": "Union Pacific Corporation",
    "name_kr": "유니언 퍼시픽",
    "sector": "Industrials",
-   "price": 307.0,
+   "price": 303.43,
    "avg_dollar_vol_b": 0.76,
    "roll_min_b": 0.6,
-   "interest_ratio": 0.93
+   "interest_ratio": 0.94
   },
   {
    "ticker": "LMT",
    "name": "Lockheed Martin",
    "name_kr": "록히드마틴",
    "sector": "Industrials",
-   "price": 643.15,
+   "price": 639.0,
    "avg_dollar_vol_b": 0.74,
    "roll_min_b": 0.61,
-   "interest_ratio": 1.19
+   "interest_ratio": 1.21
   },
   {
    "ticker": "BLK",
    "name": "BlackRock",
    "name_kr": null,
    "sector": "Financials",
-   "price": 1167.15,
+   "price": 1161.32,
    "avg_dollar_vol_b": 0.73,
    "roll_min_b": 0.58,
-   "interest_ratio": 1.05
+   "interest_ratio": 1.06
   },
   {
    "ticker": "NXPI",
    "name": "NXP Semiconductors",
    "name_kr": "NXP 반도체",
    "sector": "Information Technology",
-   "price": 257.24,
+   "price": 262.79,
    "avg_dollar_vol_b": 0.72,
    "roll_min_b": 0.51,
-   "interest_ratio": 1.47
+   "interest_ratio": 1.51
   },
   {
    "ticker": "DE",
    "name": "Deere & Company",
    "name_kr": null,
    "sector": "Industrials",
-   "price": 667.6,
+   "price": 665.83,
    "avg_dollar_vol_b": 0.7,
-   "roll_min_b": 0.56,
-   "interest_ratio": 1.0
+   "roll_min_b": 0.57,
+   "interest_ratio": 1.01
   },
   {
    "ticker": "TGT",
    "name": "Target Corporation",
    "name_kr": "타깃",
    "sector": "Consumer Staples",
-   "price": 158.38,
+   "price": 154.4,
    "avg_dollar_vol_b": 0.7,
    "roll_min_b": 0.6,
-   "interest_ratio": 0.86
+   "interest_ratio": 0.85
   },
   {
    "ticker": "PGR",
    "name": "Progressive Corporation",
    "name_kr": "프로그레시브",
    "sector": "Financials",
-   "price": 233.92,
+   "price": 229.11,
    "avg_dollar_vol_b": 0.69,
    "roll_min_b": 0.55,
    "interest_ratio": 0.81
@@ -1105,67 +1105,67 @@
    "name": "Workday, Inc.",
    "name_kr": null,
    "sector": "Information Technology",
-   "price": 198.13,
+   "price": 197.94,
    "avg_dollar_vol_b": 0.69,
    "roll_min_b": 0.52,
-   "interest_ratio": 0.63
-  },
-  {
-   "ticker": "CMG",
-   "name": "Chipotle Mexican Grill",
-   "name_kr": "치폴레",
-   "sector": "Consumer Discretionary",
-   "price": 32.91,
-   "avg_dollar_vol_b": 0.68,
-   "roll_min_b": 0.53,
-   "interest_ratio": 1.11
-  },
-  {
-   "ticker": "VRTX",
-   "name": "Vertex Pharmaceuticals",
-   "name_kr": null,
-   "sector": "Health Care",
-   "price": 553.15,
-   "avg_dollar_vol_b": 0.68,
-   "roll_min_b": 0.55,
-   "interest_ratio": 1.13
+   "interest_ratio": 0.64
   },
   {
    "ticker": "BMY",
    "name": "Bristol Myers Squibb",
    "name_kr": null,
    "sector": "Health Care",
-   "price": 63.02,
+   "price": 61.71,
+   "avg_dollar_vol_b": 0.68,
+   "roll_min_b": 0.54,
+   "interest_ratio": 1.07
+  },
+  {
+   "ticker": "VRTX",
+   "name": "Vertex Pharmaceuticals",
+   "name_kr": null,
+   "sector": "Health Care",
+   "price": 530.76,
+   "avg_dollar_vol_b": 0.68,
+   "roll_min_b": 0.55,
+   "interest_ratio": 1.18
+  },
+  {
+   "ticker": "CMG",
+   "name": "Chipotle Mexican Grill",
+   "name_kr": "치폴레",
+   "sector": "Consumer Discretionary",
+   "price": 33.26,
    "avg_dollar_vol_b": 0.67,
    "roll_min_b": 0.53,
-   "interest_ratio": 1.12
+   "interest_ratio": 1.1
   },
   {
    "ticker": "BX",
    "name": "Blackstone Inc.",
    "name_kr": null,
    "sector": "Financials",
-   "price": 120.14,
+   "price": 118.19,
    "avg_dollar_vol_b": 0.65,
    "roll_min_b": 0.52,
-   "interest_ratio": 1.0
+   "interest_ratio": 0.99
   },
   {
    "ticker": "LOW",
    "name": "Lowe's",
    "name_kr": "로우스",
    "sector": "Consumer Discretionary",
-   "price": 218.15,
+   "price": 213.38,
    "avg_dollar_vol_b": 0.65,
    "roll_min_b": 0.57,
-   "interest_ratio": 0.97
+   "interest_ratio": 0.98
   },
   {
    "ticker": "SHW",
    "name": "Sherwin-Williams",
    "name_kr": "셔윈윌리엄스",
    "sector": "Materials",
-   "price": 352.37,
+   "price": 340.87,
    "avg_dollar_vol_b": 0.65,
    "roll_min_b": 0.52,
    "interest_ratio": 0.91
@@ -1175,10 +1175,10 @@
    "name": "Regeneron Pharmaceuticals",
    "name_kr": "리제네론",
    "sector": "Health Care",
-   "price": 961.26,
+   "price": 973.36,
    "avg_dollar_vol_b": 0.64,
    "roll_min_b": 0.51,
-   "interest_ratio": 1.02
+   "interest_ratio": 1.07
   }
  ]
 }
