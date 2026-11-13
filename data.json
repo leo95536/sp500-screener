@@ -1,6 +1,6 @@
 {
- "updated_utc": "2026-11-12 02:36 UTC",
- "updated_kst": "2026-11-12 11:36 KST",
+ "updated_utc": "2026-11-13 02:15 UTC",
+ "updated_kst": "2026-11-13 11:15 KST",
  "config": {
   "LIQUIDITY_YEARS": 2,
   "MIN_DOLLAR_VOLUME_M": 500,
@@ -16,7 +16,7 @@
    "name_kr": "엔비디아",
    "sector": "Information Technology",
    "price": 173.73,
-   "avg_dollar_vol_b": 31.37,
+   "avg_dollar_vol_b": 31.38,
    "roll_min_b": 24.88,
    "interest_ratio": 1.01
   },
@@ -88,7 +88,7 @@
    "price": 552.9,
    "avg_dollar_vol_b": 9.4,
    "roll_min_b": 3.9,
-   "interest_ratio": 1.69
+   "interest_ratio": 1.7
   },
   {
    "ticker": "GOOGL",
@@ -148,7 +148,7 @@
    "price": 128.38,
    "avg_dollar_vol_b": 4.03,
    "roll_min_b": 1.41,
-   "interest_ratio": 1.37
+   "interest_ratio": 1.38
   },
   {
    "ticker": "NFLX",
